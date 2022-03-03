@@ -116,3 +116,9 @@ select distinct nazov
 select count(*)
     from zap_predmety;
     
+-- 12. Vypiste pocet studentov, ktori maju zapisany predmet 'Zaklady databazovych systemov'
+select count(*)
+    from zap_predmety join predmet on (predmet.cis_predm = zap_predmety.cis_predm)
+        where nazov = 'Zaklady databazovych systemov';
+        
+        
