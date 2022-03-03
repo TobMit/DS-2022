@@ -107,7 +107,12 @@ select distinct ucitel.meno, ucitel.priezvisko
     from ucitel join zap_predmety on (prednasajuci = ucitel.os_cislo) join student on (zap_predmety. os_cislo = student.os_cislo)
         where st_odbor BETWEEN 100 and 199;
 
--- 10. vypiste nazvy predmetov studenta s priezviskom 'Balaz'
+-- 10. Vypiste nazvy predmetov studenta s priezviskom 'Balaz'
 select distinct nazov
     from predmet join zap_predmety on (predmet.cis_predm = zap_predmety.cis_predm) join student on (zap_predmety.os_cislo = student.os_cislo) join os_udaje on (student.rod_cislo = os_udaje.rod_cislo)
         where priezvisko = 'Balaz';
+        
+-- 11. Vypiste pocet riadkov v tabulke zap_predmety
+select count(*)
+    from zap_predmety;
+    
