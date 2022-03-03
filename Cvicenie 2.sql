@@ -59,7 +59,16 @@ select count(*)
     from student
         where rocnik = '2';
         
+-- 1. Vypiste vsetky udaje o vsetkych studentoch
 
+select *
+    from student join os_udaje using (rod_cislo);
+    
+-- 2. Vypíšte menny zoznam všetkých študentov 2. roèníka.    
+
+select meno, priezvisko
+    from student join os_udaje using (rod_cislo)
+        where rocnik = '2';
     
 
 
