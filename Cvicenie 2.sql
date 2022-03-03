@@ -92,3 +92,8 @@ select distinct meno, priezvisko
     from student join os_udaje using (rod_cislo) join zap_predmety using(os_cislo)
         where cis_predm = 'BI06'
             order by priezvisko;
+            
+-- 7. Vypiste vsetky kombinacie prednasajuci / cis_predm, ktore sa nachadzajú v relacii zap_predmety tak, aby sa eliminovali dulikáty
+select distinct meno, priezvisko, nazov
+    from ucitel join zap_predmety on (prednasajuci = ucitel.os_cislo) join predmet using(cis_predm)
+        order by priezvisko;
