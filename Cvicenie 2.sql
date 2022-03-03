@@ -87,5 +87,8 @@ select meno, priezvisko
         where substr(st_skupina,2,1) = 'P'
             order by priezvisko;
             
-
-
+-- 6. Vypiste menny zoznam studentov, ktori studuju predmet BI06  a usporiadj ich
+select distinct meno, priezvisko
+    from student join os_udaje using (rod_cislo) join zap_predmety using(os_cislo)
+        where cis_predm = 'BI06'
+            order by priezvisko;
