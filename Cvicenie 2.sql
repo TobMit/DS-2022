@@ -94,6 +94,10 @@ select distinct meno, priezvisko
             order by priezvisko;
             
 -- 7. Vypiste vsetky kombinacie prednasajuci / cis_predm, ktore sa nachadzajú v relacii zap_predmety tak, aby sa eliminovali dulikáty
-select distinct meno, priezvisko, nazov
-    from ucitel join zap_predmety on (prednasajuci = ucitel.os_cislo) join predmet using(cis_predm)
-        order by priezvisko;
+select distinct prednasajuci, cis_predm
+    from ucitel join zap_predmety on (prednasajuci = ucitel.os_cislo) join predmet using(cis_predm);
+
+        
+-- 8. K predchadjajucemu vypisu doplne meno ucitela a nazov predmetu.
+select distinct prednasajuci, cis_predm, meno,predmet.nazov
+    from ucitel join zap_predmety on (prednasajuci = ucitel.os_cislo) join predmet using(cis_predm);
