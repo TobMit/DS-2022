@@ -121,4 +121,8 @@ select count(*)
     from zap_predmety join predmet on (predmet.cis_predm = zap_predmety.cis_predm)
         where nazov = 'Zaklady databazovych systemov';
         
-        
+-- 13. Vypíste menny zoznam studentov spolu z dátumom narodenia
+select meno, substr (rod_cislo,5,2), substr (rod_cislo,3,2), substr (rod_cislo,0,2)
+    from os_udaje;
+    
+    
