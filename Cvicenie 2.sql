@@ -76,6 +76,9 @@ select meno, priezvisko
         where substr (rod_cislo, 0,2) BETWEEN 85 and 89;
     
 
-
+-- 4. Vypiste menny zooznam studentov, ktorý pracujú na detesovanom pracovisku v prievidzy 
+select meno, priezvisko
+    from student join os_udaje using (rod_cislo)
+        where substr(st_skupina,2,1) = 'P';
 
 
