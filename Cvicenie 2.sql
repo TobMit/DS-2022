@@ -122,11 +122,16 @@ select count(*)
         where nazov = 'Zaklady databazovych systemov';
         
 -- 13. Vypíste menny zoznam studentov spolu z dátumom narodenia
-select meno,priezvisko,  substr (rod_cislo,5,2), substr (rod_cislo,3,2), substr (rod_cislo,0,2)
+select meno,priezvisko,  substr (rod_cislo,5,2)|| '.' || substr (rod_cislo,3,2)|| '.' || (substr (rod_cislo,0,2)+1900)
     from os_udaje;
     
 -- 14. Vypište poèet kreditov študenta s osobnym èislom 500439 z aabsolvované predmety
 select  sum (ects) 
     from zap_predmety join predmet using (cis_predm)
         where os_cislo= '500439' and vysledok is not null;
+        
+-- 15. Vypiste menny zoznam studentov druheho rocnika spolu s ich vekom
+select meno, priezvisko, to_char(sysdate,'YYYY') - (substr(rod_cislo,0,2)+1900)
+    from student join os_udaje using (rod_cislo)
+        where rocnik = '2';
         
