@@ -69,6 +69,11 @@ select *
 select meno, priezvisko
     from student join os_udaje using (rod_cislo)
         where rocnik = '2';
+        
+-- 3. Vypiste menny zoznam studentov narodenych v rokoch 1985-1989
+select meno, priezvisko
+    from os_udaje
+        where substr (rod_cislo, 0,2) BETWEEN 85 and 89;
     
 
 
