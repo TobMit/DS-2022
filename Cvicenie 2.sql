@@ -101,3 +101,9 @@ select distinct prednasajuci, cis_predm
 -- 8. K predchadjajucemu vypisu doplne meno ucitela a nazov predmetu.
 select distinct prednasajuci, cis_predm, meno,predmet.nazov
     from ucitel join zap_predmety on (prednasajuci = ucitel.os_cislo) join predmet using(cis_predm);
+    
+-- 9. Vypiste mena ucitelov, ktori ucia (sú prednasajucimi) studentov druheho rocnika bakalarskeho studia (t.j. cislo studijneho odbou je z intevalu <100,99>)
+select distinct ucitel.meno, ucitel.priezvisko
+    from ucitel join zap_predmety on (prednasajuci = ucitel.os_cislo) join student on (zap_predmety. os_cislo = student.os_cislo)
+        where st_odbor BETWEEN 100 and 199;
+
