@@ -81,4 +81,11 @@ select meno, priezvisko
     from student join os_udaje using (rod_cislo)
         where substr(st_skupina,2,1) = 'P';
 
+-- 5. Predchádzajúci výpis utriedte pod¾a priezviska
+select meno, priezvisko
+    from student join os_udaje using (rod_cislo)
+        where substr(st_skupina,2,1) = 'P'
+            order by priezvisko;
+            
+
 
