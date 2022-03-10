@@ -98,7 +98,7 @@ select *
         where cis_predm = 'BI11' ;
         
 select *
-    from student;
+    from kvet3.osoba;
 
 -- priprave pre ulohy
 select *
@@ -121,5 +121,18 @@ commit;
 insert into zap_predmety ( os_cislo, cis_predm, skrok, prednasajuci, ects)
     values ('90', 'II07', '2','KI001','5');
 
+-- uloha 3.1.2
+insert into os_udaje(rod_cislo, meno, priezvisko)
+    select rod_cislo, meno, priezvisko 
+        from kvet3.osoba;
+commit;
+insert into student(rod_cislo, os_cislo, rocnik, st_skupina,st_odbor, st_zameranie)
+    select rod_cislo, os_cislo, rocnik, st_skupina, st_odbor, st_zameranie
+        from kvet3.osoba;
+commit;
 
-        
+insert into zap_predmety(os_cislo, cis_predm, skrok, prednasajuci, ects)
+    select os_cislo, cis_predm, skrok, garant, ects
+        from kvet3.skusky sk join predmet_bod using(cis_predm,skrok);
+    
+commit;
