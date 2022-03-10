@@ -94,14 +94,32 @@ select *
       where popis_odboru = 'Informatika' and popis_zamerania is NULL;
      
 select *
-    from st_odbory;
+    from predmet_bod
+        where cis_predm = 'BI11' ;
+        
+select *
+    from student;
 
 -- priprave pre ulohy
+select *
+    from predmet_bod
+        where cis_predm = 'II07' ;
 
-desc os_udaje;
+desc zap_predmety;
+-- uloha 3.1.1
 
-insert into
-    values (
+insert into os_udaje (rod_cislo, meno, priezvisko)
+    values ('860114/2462','Karol','Lempassky');
+    
+commit;
+
+insert into student (ROD_CISLO, OS_CISLO, ROCNIK, ST_SKUPINA, ST_ODBOR, ST_ZAMERANIE)
+    values ('860114/2462', '90', '2', '5ZSA21' ,'200' , '2');
+    
+commit;
+
+insert into zap_predmety ( os_cislo, cis_predm, skrok, prednasajuci, ects)
+    values ('90', 'II07', '2','KI001','5');
 
 
         
