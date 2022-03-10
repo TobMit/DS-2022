@@ -52,3 +52,19 @@ insert into os_udaje (rod_cislo, meno, priezvisko, ulica, psc, obec)
   
 insert into os_udaje (rod_cislo, meno, priezvisko)
     values ('010417/1435', 'Jozef', 'Vlozeny');            
+
+
+--
+insert into os_udaje (rod_cislo, psc, meno, priezvisko, obec)
+    select  rod_cislo, atualne_psc, meno, priezvisko, p_mesto.n_mesta
+        from kvet3.p_osoba 
+         join kvet3.p_mesto on (p_osoba.aktualne_psc = p_mesto.psc)
+            where kvet3.p_osoba.rod_cislo not in (select rod_cislo form os_udaje);
+            
+            
+select count(rod_cislo)
+    from os_udaje;
+    
+update student
+    set ukoncenie = sysdate
+        where ukoncenie is null;
