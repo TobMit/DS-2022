@@ -79,6 +79,10 @@ update student
  set rod_cislo='841107/3456'
     where rod_cislo='841106/3456';
 
+delete 
+    from os_udaje
+        where rod_cislo = '841106/3456';
+
 select * 
     from os_udaje;
         
