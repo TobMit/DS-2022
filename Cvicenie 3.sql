@@ -56,7 +56,7 @@ insert into os_udaje (rod_cislo, meno, priezvisko)
 
 --
 insert into os_udaje (rod_cislo, psc, meno, priezvisko, obec)
-    select  rod_cislo, atualne_psc, meno, priezvisko, p_mesto.n_mesta
+    select  rod_cislo, aktualne_psc, meno, priezvisko, p_mesto.n_mesta
         from kvet3.p_osoba 
          join kvet3.p_mesto on (p_osoba.aktualne_psc = p_mesto.psc)
             where kvet3.p_osoba.rod_cislo not in (select rod_cislo form os_udaje);
@@ -68,3 +68,17 @@ select count(rod_cislo)
 update student
     set ukoncenie = sysdate
         where ukoncenie is null;
+        
+-- zmen hodnotu rodneho cisla
+insert into os_udaje (rod_cislo, meno, priezvisko)
+    select '841107/3456', meno, priezvisko 
+        from os_udaje
+            where rod_cislo  = '841106/3456';
+    
+update student
+ set rod_cislo='841107/3456'
+    where rod_cislo='841106/3456';
+
+select * 
+    from os_udaje;
+        
