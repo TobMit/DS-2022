@@ -87,7 +87,7 @@ select *
     from os_udaje;     
 -- Aktualizacia cisla predmetu, kedze sa na to nieco ukazuje tak to nemozem spravit priamo na dokoncenie
 
-
+--
 
 select * 
     from st_odbory 
@@ -96,6 +96,12 @@ select *
 select *
     from st_odbory;
 
+-- priprave pre ulohy
+
+desc os_udaje;
+
+insert into
+    values (
 
 
         
