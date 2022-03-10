@@ -82,7 +82,20 @@ update student
 delete 
     from os_udaje
         where rod_cislo = '841106/3456';
+        
+select * 
+    from os_udaje;     
+-- Aktualizacia cisla predmetu, kedze sa na to nieco ukazuje tak to nemozem spravit priamo na dokoncenie
+
+
 
 select * 
-    from os_udaje;
+    from st_odbory 
+      where popis_odboru = 'Informatika' and popis_zamerania is NULL;
+     
+select *
+    from st_odbory;
+
+
+
         
