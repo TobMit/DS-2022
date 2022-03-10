@@ -38,5 +38,17 @@ select os_cislo
  
                 
 select meno, priezvisko, rod_cislo
-    from kvete3.p_osoba join kvet3.p_mesto on (kvet3
-              
+    from kvete3.p_osoba join kvet3.p_mesto  mesto_nar on (mesto_nar.psc = p_osoba.narod_psc)
+        join kvet3.p_mesto  mesto_bydliska on (mesto_bydliska = p_osoba.aktualne_psc)
+            where mesto_nar.n_mesta = mesto_bydliska.n_mesta;
+    
+    
+desc kvet3.p_mesto;
+
+-- vlozit nove udaje
+insert into os_udaje (rod_cislo, meno, priezvisko, ulica, psc, obec)
+    values ('010517/1435', 'Jozef', 'Dolny', 'Nahodna','05361', 'Kosice');
+  
+  
+insert into os_udaje (rod_cislo, meno, priezvisko)
+    values ('010417/1435', 'Jozef', 'Vlozeny');            
