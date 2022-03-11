@@ -136,6 +136,8 @@ insert into zap_predmety(os_cislo, cis_predm, skrok, prednasajuci, ects)
         from kvet3.skusky sk join predmet_bod using(cis_predm,skrok);
     
 commit;
+		
+---- Update ----
             
 -- Uloha 3.2.1
 update os_udaje set priezvisko = 'Stary' where priezvisko 'Novy';
@@ -145,23 +147,29 @@ update os_udaje set priezvisko = 'Stary' where priezvisko 'Novy';
 update os_udaje set meno = 'Karolina' WHERE
  exists (select 'x' from student where os_cislo = '8');
 
--- 3.
+-- Uloha 3.2.3.
 
 update zap_predmet set cis_predm = 'BI01' WHERE 
  EXISTS (select 'x' from student
 	join zap_predmet using (os_cislo)
 	 where rocnik = '1' and cis_predm = 'BI11');
 
--- 4.
+-- Uloha 3.2.4.
 	
 update student set stav = 'S' where stav is null;
             
             
--- 5.
+-- Uloha 3.2.5.
 
 update student set rocnik = (rocnik + 1), 
 				   	  st_skupina = (substr(sk_skupina, 0,4) || (substr(sk_skupina, 5,1) + 1 ||
 												(substr(sk_skupina, 6,1))
  where (st_odbor between 100 and 199) and rocnik < 3 
 	or (st_odbor between 200 and 299) and rocnik < 2;
-            
+										    
+										    
+------ Delete  ------
+-- Uloha 3.3.1
+delete 
+    from os_udaje
+        where rod_cislo = '841106/3456';
