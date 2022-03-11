@@ -136,3 +136,26 @@ insert into zap_predmety(os_cislo, cis_predm, skrok, prednasajuci, ects)
         from kvet3.skusky sk join predmet_bod using(cis_predm,skrok);
     
 commit;
+            
+-- Uloha 3.2.1
+update os_udaje set priezvisko = 'Stary' where priezvisko 'Novy';
+            commit;
+-- Uloha 3.2.2
+            
+update os_udaje set meno = 'Karolina' WHERE
+ exists (select 'x' from student where os_cislo = '8');
+
+-- 3.
+
+update zap_predmet set cis_predm = 'BI01' WHERE 
+ EXISTS (select 'x' from student
+	join zap_predmet using (os_cislo)
+	 where rocnik = '1' and cis_predm = 'BI11');
+
+-- 4.
+	
+update student set stav = 'S' where stav is null;
+            
+            
+     
+            
