@@ -157,5 +157,11 @@ update zap_predmet set cis_predm = 'BI01' WHERE
 update student set stav = 'S' where stav is null;
             
             
-     
+-- 5.
+
+update student set rocnik = (rocnik + 1), 
+				   	  st_skupina = (substr(sk_skupina, 0,4) || (substr(sk_skupina, 5,1) + 1 ||
+												(substr(sk_skupina, 6,1))
+ where (st_odbor between 100 and 199) and rocnik < 3 
+	or (st_odbor between 200 and 299) and rocnik < 2;
             
