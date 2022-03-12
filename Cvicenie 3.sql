@@ -98,7 +98,8 @@ select *
         where cis_predm = 'BI11' ;
         
 select *
-    from kvet3.osoba;
+    from os_udaje
+        where priezvisko = 'Novy';
 
 -- priprave pre ulohy
 select *
@@ -109,7 +110,7 @@ desc zap_predmety;
 -- uloha 3.1.1
 
 insert into os_udaje (rod_cislo, meno, priezvisko)
-    values ('860114/2462','Karol','Lempassky');
+    values ('830722/6247','Karol','Novy');
     
 commit;
 
@@ -138,14 +139,28 @@ insert into zap_predmety(os_cislo, cis_predm, skrok, prednasajuci, ects)
 commit;
 		
 ---- Update ----
+ 
+ -------------------------------------------------------------------------------
+select *
+    from os_udaje join student using (rod_cislo)
+        where student.os_cislo = '8';
+desc os_udaje;
+
+ROLLBACk;
+
+
+----------------------------------------------------------------------------
             
 -- Uloha 3.2.1
-update os_udaje set priezvisko = 'Stary' where priezvisko 'Novy';
+update os_udaje set priezvisko = 'Stary' where priezvisko = 'Novy';
             commit;
 -- Uloha 3.2.2
             
 update os_udaje set meno = 'Karolina' WHERE
- exists (select 'x' from student where os_cislo = '8');
+ rod_cislo in (select rod_cislo 
+                    from student where os_cislo = '8');
+commit; 
+
 
 -- Uloha 3.2.3.
 
