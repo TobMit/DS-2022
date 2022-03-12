@@ -84,7 +84,7 @@ delete
         where rod_cislo = '841106/3456';
         
 select * 
-    from os_udaje;     
+    from zap_predmety;     
 -- Aktualizacia cisla predmetu, kedze sa na to nieco ukazuje tak to nemozem spravit priamo na dokoncenie
 
 --
@@ -115,12 +115,12 @@ insert into os_udaje (rod_cislo, meno, priezvisko)
 commit;
 
 insert into student (ROD_CISLO, OS_CISLO, ROCNIK, ST_SKUPINA, ST_ODBOR, ST_ZAMERANIE)
-    values ('860114/2462', '90', '2', '5ZSA21' ,'200' , '2');
+    values ('830722/6247', '123', '1', '5ZI012' ,'100' , '0');
     
 commit;
 
 insert into zap_predmety ( os_cislo, cis_predm, skrok, prednasajuci, ects)
-    values ('90', 'II07', '2','KI001','5');
+    values ('123', 'BI11', '2008','EX002','1');
 
 -- uloha 3.1.2
 insert into os_udaje(rod_cislo, meno, priezvisko)
@@ -144,6 +144,16 @@ commit;
 select *
     from os_udaje join student using (rod_cislo)
         where student.os_cislo = '8';
+
+select *
+    from zap_predmety join student using (os_cislo)
+        where cis_predm = 'BI11' 
+        and rocnik = 1;  
+        
+select *
+    from student
+        where stav is null;
+
 desc os_udaje;
 
 ROLLBACk;
@@ -152,26 +162,27 @@ ROLLBACk;
 ----------------------------------------------------------------------------
             
 -- Uloha 3.2.1
-update os_udaje set priezvisko = 'Stary' where priezvisko = 'Novy';
+update os_udaje set priezvisko = 'Stary' 
+    where priezvisko = 'Novy';
             commit;
 -- Uloha 3.2.2
             
-update os_udaje set meno = 'Karolina' WHERE
- rod_cislo in (select rod_cislo 
+update os_udaje set meno = 'Karolina' 
+    WHERE rod_cislo in (select rod_cislo 
                     from student where os_cislo = '8');
 commit; 
 
 
 -- Uloha 3.2.3.
 
-update zap_predmet set cis_predm = 'BI01' WHERE 
- EXISTS (select 'x' from student
-	join zap_predmet using (os_cislo)
-	 where rocnik = '1' and cis_predm = 'BI11');
+update zap_predmety set cis_predm = 'BI01' 
+WHERE os_cislo in (select os_cislo from student
+        where cis_predm = 'BI11' 
+        and rocnik = 1);
 
 -- Uloha 3.2.4.
-	
-update student set stav = 'S' where stav is null;
+update student set stav = 'S' 
+    where stav is NULL;
             
             
 -- Uloha 3.2.5.
