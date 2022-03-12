@@ -120,7 +120,7 @@ insert into student (ROD_CISLO, OS_CISLO, ROCNIK, ST_SKUPINA, ST_ODBOR, ST_ZAMER
 commit;
 
 insert into zap_predmety ( os_cislo, cis_predm, skrok, prednasajuci, ects)
-    values ('123', 'BI11', '2008','EX002','1');
+    values ('123', 'BE01', '2008','EX002','1');
 
 -- uloha 3.1.2
 insert into os_udaje(rod_cislo, meno, priezvisko)
@@ -196,7 +196,24 @@ update student set rocnik = (rocnik + 1),
 										    
 										    
 ------ Delete  ------
+select *
+    from zap_predmety
+         where os_cislo = '123';
+         
+select *
+    from zap_predmety join student using (os_cislo)
+         where cis_predm = 'BI01' and st_skupina = '5ZI022';
+
 -- Uloha 3.3.1
-delete 
-    from os_udaje
-        where rod_cislo = '841106/3456';
+delete from zap_predmety
+        where os_cislo = '123' 
+            and cis_predm = 'BE01';
+            
+-- Uloha 3.3.2
+
+delete from zap_predmety
+    where cis_predm = 'BI01' 
+        and os_cislo in (select os_cislo
+                                from student 
+                                    where st_skupina = '5ZI022');
+commit;
