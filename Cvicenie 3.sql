@@ -203,6 +203,34 @@ select *
 select *
     from zap_predmety join student using (os_cislo)
          where cis_predm = 'BI01' and st_skupina = '5ZI022';
+         
+         
+        
+select dat_zapisu,
+    to_char(dat_zapisu, 'DD') as den,
+    to_char(dat_zapisu, 'MM') as mesiac,
+    to_char(dat_zapisu, 'YYYY') as rok
+        from student;     
+
+desc student;
+
+
+-- predpripravene selecty pre ulohy 3.3.3
+select meno, priezvisko, cis_predm, st.os_cislo, to_char(dat_zapisu, 'YYYY')
+    from student st join  os_udaje using (rod_cislo) join zap_predmety on (st.os_cislo = zap_predmety.os_cislo)
+        where to_char(dat_zapisu, 'YYYY') = '1999';
+
+
+select os_cislo, to_char(dat_zapisu, 'YYYY') as rok
+    from student 
+        where to_char(dat_zapisu, 'YYYY') = '1999';
+        
+select meno, priezvisko, os_cislo, to_char(dat_zapisu, 'YYYY') as rok
+    from student join  os_udaje using (rod_cislo)
+        where to_char(dat_zapisu, 'YYYY') = '1999';
+
+
+
 
 -- Uloha 3.3.1
 delete from zap_predmety
@@ -217,3 +245,7 @@ delete from zap_predmety
                                 from student 
                                     where st_skupina = '5ZI022');
 commit;
+
+-- Uloha 3.3.3
+
+delete 
