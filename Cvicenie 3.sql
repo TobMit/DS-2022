@@ -199,6 +199,10 @@ update student set rocnik = (rocnik + 1),
 select *
     from zap_predmety
          where os_cislo = '123';
+select *
+    from os_udaje
+        where rod_cislo not in (select rod_cislo
+                                from student);
          
 select *
     from zap_predmety join student using (os_cislo)
@@ -213,6 +217,7 @@ select dat_zapisu,
         from student;     
 
 desc student;
+desc zap_predmety;
 
 
 -- predpripravene selecty pre ulohy 3.3.3
@@ -248,4 +253,21 @@ commit;
 
 -- Uloha 3.3.3
 
-delete 
+delete from zap_predmety
+    where os_cislo in ( select os_cislo
+                            from student 
+                                where to_char(dat_zapisu, 'YYYY') = '1999');
+ 
+-- nie som si istý èi to funguje, keïže som si tabu¾ku vymazal opaène, najskôr student a potom os_udaje ale spravne pocasie je os_udaje a potom student
+                                
+delete from os_udaje
+    where rod_cislo in ( select rod_cislo
+                            from student 
+                                where to_char(dat_zapisu, 'YYYY') = '1999');
+                                
+delete from student
+    where to_char(dat_zapisu, 'YYYY') = '1999';
+    
+commit;
+
+rollback;
