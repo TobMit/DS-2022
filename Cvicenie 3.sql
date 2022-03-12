@@ -152,7 +152,8 @@ select *
         
 select *
     from student
-        where stav is null;
+         where (st_odbor between 100 and 199) and rocnik < 3 
+            or (st_odbor between 200 and 299) and rocnik < 2;
 
 desc os_udaje;
 
@@ -188,8 +189,8 @@ update student set stav = 'S'
 -- Uloha 3.2.5.
 
 update student set rocnik = (rocnik + 1), 
-				   	  st_skupina = (substr(sk_skupina, 0,4) || (substr(sk_skupina, 5,1) + 1 ||
-												(substr(sk_skupina, 6,1))
+				   	  st_skupina = (substr(st_skupina, 0,4) || (substr(st_skupina, 5,1) + 1 ||
+												(substr(st_skupina, 6,1))))
  where (st_odbor between 100 and 199) and rocnik < 3 
 	or (st_odbor between 200 and 299) and rocnik < 2;
 										    
