@@ -30,3 +30,13 @@ insert into student (os_cislo, st_odbor, st_zameranie, rod_cislo, rocnik, st_sku
     VALUES (123456, 100, 0, '123456/1234', 2, '5ZYI23');
     
 ROLLBACK;
+
+-- zapis predmet jazyk C++ studentovi
+select *
+    from predmet_bod
+        where cis_predm = 'BI30';
+
+insert into zap_predmety (os_cislo, cis_predm, skrok, prednasajuci, ects)
+    values (123456, 'BI30', 2022, 'KI003', 5); 
+    
+    
