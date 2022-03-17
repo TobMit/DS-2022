@@ -84,7 +84,7 @@ delete
         where rod_cislo = '841106/3456';
         
 select * 
-    from os_udaje;     
+    from zap_predmety;     
 -- Aktualizacia cisla predmetu, kedze sa na to nieco ukazuje tak to nemozem spravit priamo na dokoncenie
 
 --
@@ -98,7 +98,8 @@ select *
         where cis_predm = 'BI11' ;
         
 select *
-    from kvet3.osoba;
+    from os_udaje
+        where priezvisko = 'Novy';
 
 -- priprave pre ulohy
 select *
@@ -109,17 +110,17 @@ desc zap_predmety;
 -- uloha 3.1.1
 
 insert into os_udaje (rod_cislo, meno, priezvisko)
-    values ('860114/2462','Karol','Lempassky');
+    values ('830722/6247','Karol','Novy');
     
 commit;
 
 insert into student (ROD_CISLO, OS_CISLO, ROCNIK, ST_SKUPINA, ST_ODBOR, ST_ZAMERANIE)
-    values ('860114/2462', '90', '2', '5ZSA21' ,'200' , '2');
+    values ('830722/6247', '123', '1', '5ZI012' ,'100' , '0');
     
 commit;
 
 insert into zap_predmety ( os_cislo, cis_predm, skrok, prednasajuci, ects)
-    values ('90', 'II07', '2','KI001','5');
+    values ('123', 'BE01', '2008','EX002','1');
 
 -- uloha 3.1.2
 insert into os_udaje(rod_cislo, meno, priezvisko)
@@ -136,3 +137,137 @@ insert into zap_predmety(os_cislo, cis_predm, skrok, prednasajuci, ects)
         from kvet3.skusky sk join predmet_bod using(cis_predm,skrok);
     
 commit;
+		
+---- Update ----
+ 
+ -------------------------------------------------------------------------------
+select *
+    from os_udaje join student using (rod_cislo)
+        where student.os_cislo = '8';
+
+select *
+    from zap_predmety join student using (os_cislo)
+        where cis_predm = 'BI11' 
+        and rocnik = 1;  
+        
+select *
+    from student
+         where (st_odbor between 100 and 199) and rocnik < 3 
+            or (st_odbor between 200 and 299) and rocnik < 2;
+
+desc os_udaje;
+
+ROLLBACk;
+
+
+----------------------------------------------------------------------------
+            
+-- Uloha 3.2.1
+update os_udaje set priezvisko = 'Stary' 
+    where priezvisko = 'Novy';
+            commit;
+-- Uloha 3.2.2
+            
+update os_udaje set meno = 'Karolina' 
+    WHERE rod_cislo in (select rod_cislo 
+                    from student where os_cislo = '8');
+commit; 
+
+
+-- Uloha 3.2.3.
+
+update zap_predmety set cis_predm = 'BI01' 
+WHERE os_cislo in (select os_cislo from student
+        where cis_predm = 'BI11' 
+        and rocnik = 1);
+
+-- Uloha 3.2.4.
+update student set stav = 'S' 
+    where stav is NULL;
+            
+            
+-- Uloha 3.2.5.
+
+update student set rocnik = (rocnik + 1), 
+				   	  st_skupina = (substr(st_skupina, 0,4) || (substr(st_skupina, 5,1) + 1 ||
+												(substr(st_skupina, 6,1))))
+ where (st_odbor between 100 and 199) and rocnik < 3 
+	or (st_odbor between 200 and 299) and rocnik < 2;
+										    
+										    
+------ Delete  ------
+select *
+    from zap_predmety
+         where os_cislo = '123';
+select *
+    from os_udaje
+        where rod_cislo not in (select rod_cislo
+                                from student);
+         
+select *
+    from zap_predmety join student using (os_cislo)
+         where cis_predm = 'BI01' and st_skupina = '5ZI022';
+         
+         
+        
+select dat_zapisu,
+    to_char(dat_zapisu, 'DD') as den,
+    to_char(dat_zapisu, 'MM') as mesiac,
+    to_char(dat_zapisu, 'YYYY') as rok
+        from student;     
+
+desc student;
+desc zap_predmety;
+
+
+-- predpripravene selecty pre ulohy 3.3.3
+select meno, priezvisko, cis_predm, st.os_cislo, to_char(dat_zapisu, 'YYYY')
+    from student st join  os_udaje using (rod_cislo) join zap_predmety on (st.os_cislo = zap_predmety.os_cislo)
+        where to_char(dat_zapisu, 'YYYY') = '1999';
+
+
+select os_cislo, to_char(dat_zapisu, 'YYYY') as rok
+    from student 
+        where to_char(dat_zapisu, 'YYYY') = '1999';
+        
+select meno, priezvisko, os_cislo, to_char(dat_zapisu, 'YYYY') as rok
+    from student join  os_udaje using (rod_cislo)
+        where to_char(dat_zapisu, 'YYYY') = '1999';
+
+
+
+
+-- Uloha 3.3.1
+delete from zap_predmety
+        where os_cislo = '123' 
+            and cis_predm = 'BE01';
+            
+-- Uloha 3.3.2
+
+delete from zap_predmety
+    where cis_predm = 'BI01' 
+        and os_cislo in (select os_cislo
+                                from student 
+                                    where st_skupina = '5ZI022');
+commit;
+
+-- Uloha 3.3.3
+
+delete from zap_predmety
+    where os_cislo in ( select os_cislo
+                            from student 
+                                where to_char(dat_zapisu, 'YYYY') = '1999');
+ 
+-- nie som si istý èi to funguje, keïže som si tabu¾ku vymazal opaène, najskôr student a potom os_udaje ale spravne pocasie je os_udaje a potom student
+                                
+delete from os_udaje
+    where rod_cislo in ( select rod_cislo
+                            from student 
+                                where to_char(dat_zapisu, 'YYYY') = '1999');
+                                
+delete from student
+    where to_char(dat_zapisu, 'YYYY') = '1999';
+    
+commit;
+
+rollback;
