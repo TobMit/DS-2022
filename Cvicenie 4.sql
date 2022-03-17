@@ -16,3 +16,8 @@ delete student
         select os_cislo
             from zap_predmety);
             
+-- vlozim sameho seba do tabulky
+insert into os_udaje (rod_cislo, meno,priezvisko)
+    values ('123456/1234','Janko','Hruska');
+    
+--
