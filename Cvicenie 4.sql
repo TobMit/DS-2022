@@ -20,4 +20,13 @@ delete student
 insert into os_udaje (rod_cislo, meno,priezvisko)
     values ('123456/1234','Janko','Hruska');
     
---
+-- zapisat studenta do strudenta
+desc student;
+
+select *
+    from st_odbory;
+
+insert into student (os_cislo, st_odbor, st_zameranie, rod_cislo, rocnik, st_skupina)
+    VALUES (123456, 100, 0, '123456/1234', 2, '5ZYI23');
+    
+ROLLBACK;
