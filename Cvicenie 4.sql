@@ -53,3 +53,24 @@ delete from os_udaje
 rollback;
 
 
+-- ukazka novych prikazov
+create table tmp_table (
+    id int,
+    datum date
+    );
+    
+    
+create table tmp_table2
+    as select os_cislo, sysdate as datum from student;
+
+select * 
+    from tmp_table2;
+    
+    
+-- uprava existujucej tabulkz
+alter table tmp_table2
+    add a VARCHAR2(10);
+    
+-- odstranenie tabuly z databazy
+
+drop table tmp_table2;
