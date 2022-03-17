@@ -39,4 +39,17 @@ select *
 insert into zap_predmety (os_cislo, cis_predm, skrok, prednasajuci, ects)
     values (123456, 'BI30', 2022, 'KI003', 5); 
     
+-- odstranenie toho co sme zapisali
+delete zap_predmety
+    where os_cislo = 123456
+        and cis_predm = 'BI30'
+        and skrok = 2022;
+        
+delete from student
+    where os_cislo = 123456;
     
+delete from os_udaje
+    where rod_cislo = '123456/1234' ;
+rollback;
+
+
