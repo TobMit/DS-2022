@@ -1,0 +1,11 @@
+LOAD DATA
+INFILE 'historia.unl'
+INTO TABLE p_historia
+FIELDS TERMINATED BY '|'
+(
+  ID_TYPU,
+  DAT_OD DATE 'MM/DD/YYYY',
+  DAT_DO DATE 'MM/DD/YYYY',
+  ZAKL_VYSKA
+)
+

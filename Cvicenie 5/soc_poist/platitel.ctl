@@ -1,0 +1,8 @@
+LOAD DATA
+INFILE 'platitel.unl'
+INTO TABLE p_platitel
+FIELDS TERMINATED BY '|'
+(
+  ID_PLATITELA
+)
+

@@ -1,0 +1,10 @@
+LOAD DATA
+INFILE 'kraj.unl'
+INTO TABLE p_kraj
+FIELDS TERMINATED BY '|'
+(
+  ID_KRAJA,
+  N_KRAJA, 
+  ID_KRAJINY
+)
+

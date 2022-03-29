@@ -1,0 +1,12 @@
+LOAD DATA
+INFILE 'prispevky.unl'
+INTO TABLE p_prispevky
+FIELDS TERMINATED BY '|'
+(
+  ID_POBERATELA,
+  OBDOBIE DATE 'MM/YYYY',
+  ID_TYPU,
+  KEDY DATE 'MM/DD/YYYY',
+  SUMA
+)
+

@@ -1,0 +1,10 @@
+LOAD DATA
+INFILE 'mesto.unl'
+INTO TABLE p_mesto
+FIELDS TERMINATED BY '|'
+(
+  PSC,
+  N_MESTA,
+  ID_OKRESU   
+)
+

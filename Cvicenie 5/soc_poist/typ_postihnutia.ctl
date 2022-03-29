@@ -1,0 +1,9 @@
+LOAD DATA
+INFILE 'typ_postihnutia.unl'
+INTO TABLE p_typ_postihnutia
+FIELDS TERMINATED BY '|'
+(
+  ID_POSTIHNUTIA,
+  NAZOV_POSTIHNUTIA
+)
+

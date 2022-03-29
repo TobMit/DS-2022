@@ -1,0 +1,10 @@
+LOAD DATA
+INFILE 'okres.unl'
+INTO TABLE p_okres
+FIELDS TERMINATED BY '|'
+(
+  ID_OKRESU,
+  N_OKRESU,
+  ID_KRAJA
+)
+
