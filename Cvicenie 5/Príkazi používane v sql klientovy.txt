@@ -13,3 +13,6 @@ ULOHA 5.1.7
 
 ULOHA 5.1.10
 	host exp mitala1/helso@"asterix.fri.uniza.sk/orcl.fri.uniza.sk:1572" tables="P_HISTORIA P_KRAJ P_KRAJINA P_MESTO P_ODVOD_PLATBA P_OKRES P_OSOBA P_PLATITEL P_POBERATEL P_POISTENIE P_PRISPEVKY P_TYP_POSTIHNUTIA P_TYP_PRISPEVKU P_ZAMESTNANEC P_ZAMESTNAVATEL P_ZTP" file='export_soc_poist.exp'
+
+ULOHA 5.2.3
+	host imp mitala1/helso@"obelix.fri.uniza.sk/orcl.fri.uniza.sk:1572" file=exp_DB_soc.exp
