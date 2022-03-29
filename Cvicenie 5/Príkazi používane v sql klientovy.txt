@@ -1,0 +1,8 @@
+Prihlásenie do sql klienta:
+	mitala1@"asterix.fri.uniza.sk/orcl.fri.uniza.sk:1572"
+	potom vyžiada heslo
+	Da sa to napísať aj naraz bez nutnej neskôršej autentifikacie
+		mitala1/heslo@"asterix.fri.uniza.sk/orcl.fri.uniza.sk:1572"
+		Pochopiteľne tu moje heslo nebudem dávať keby to čítaš práve ty xD a nie ja. XDD
+
+
