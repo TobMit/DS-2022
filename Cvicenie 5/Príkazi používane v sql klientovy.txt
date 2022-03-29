@@ -9,4 +9,4 @@ Prihlásenie do sql klienta:
 ULOHA 5.1.7
 	Je dobré si nakopírovať tito súbori do toho istého pričinku kde beží aj SQL klient
 	p_krajina:
-		host sqlldr mitala1@"asterix.fri.uniza.sk/orcl.fri.uniza.sk:1572" control='krajina.ctl'
+		host sqlldr mitala1/helso@"asterix.fri.uniza.sk/orcl.fri.uniza.sk:1572" control='krajina.ctl'
