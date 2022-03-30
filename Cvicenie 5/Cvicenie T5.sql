@@ -121,8 +121,25 @@ commit;
 
 -- rok 1965
 -- posledny den mesiaca
-select
-    add_months(to_date('01-Jan-2001','dd-Mon-yyyy'),level -1) "datum"
-from
-    dual
-connect by level <= 12;
+select last_day(add_months(to_date('01-Jan-1965','dd-Mon-yyyy'),level -1)) "datum"
+    from dual
+        connect by level <= 12;
+        
+select *
+    from p_prispevky;
+        
+insert into p_prispevky
+    select '6268',last_day(add_months(to_date('01-Jan-1965','dd-Mon-yyyy'),level -1)),1, last_day(add_months(to_date('01-Jan-1965','dd-Mon-yyyy'),level -1)), 10
+    from dual
+        connect by level <= 12;
+commit;
+
+-- 5.4.15
+select *
+    from p_poberatel
+        where perc_vyj < 10;
+        
+update p_poberatel set dat_do = last_day(add_months(sysdate, (12 - extract(year from sysdate))))
+    where perc_vyj < 10;
+    
+commit;
