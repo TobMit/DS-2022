@@ -84,3 +84,45 @@ select meno, priezvisko, count(*) pocet_menovcov
     from p_osoba
         Group by meno, priezvisko
             having  count(*) > 1;
+            
+-- 5.4.12
+desc p_platitel;
+insert into p_platitel values ('112112/7777');
+insert into p_osoba(rod_cislo, meno, priezvisko, psc)
+    values ('112112/7777', 'Karol','Matiasko', '01304');
+    
+select *
+    from p_mesto;
+select *
+    from p_platitel;
+commit;
+
+
+
+-- 5.4.13
+desc p_prispevky;
+
+select *
+    from p_poberatel join p_typ_prispevku using (id_typu)
+        where dat_do is null or dat_do > sysdate;
+
+select id_poberatela, add_months(sysdate, +1) "obdobie", id_typu, (sysdate+16) - - extract(day from sysdate), (perc_vyj * zakl_vyska) / 100
+    from p_poberatel join p_typ_prispevku using (id_typu)
+        where dat_do is null or dat_do > sysdate;
+        
+
+insert into p_prispevky(id_poberatela, obdobie, id_typu, kedy, suma)
+    select id_poberatela, add_months(sysdate, +1), id_typu, (sysdate+16) - - extract(day from sysdate), (perc_vyj * zakl_vyska) / 100
+    from p_poberatel join p_typ_prispevku using (id_typu)
+        where dat_do is null or dat_do > sysdate;
+commit;
+
+-- 5.4.14
+
+-- rok 1965
+-- posledny den mesiaca
+select
+    add_months(to_date('01-Jan-2001','dd-Mon-yyyy'),level -1) "datum"
+from
+    dual
+connect by level <= 12;
