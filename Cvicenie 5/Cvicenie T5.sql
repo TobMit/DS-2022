@@ -143,3 +143,95 @@ update p_poberatel set dat_do = last_day(add_months(sysdate, (12 - extract(year 
     where perc_vyj < 10;
     
 commit;
+
+-- 5.4.16
+update p_poberatel set perc_vyj = perc_vyj + 10
+    where id_typu in (select pober.id_typu
+                        from p_poberatel pober join p_typ_prispevku on (pober.id_typu = p_typ_prispevku.id_typu)
+                             where popis = 'nezamest');
+commit;
+
+-- 5.4.17
+
+select *
+    from p_poberatel;
+        
+                                               
+update p_poberatel set dat_do = sysdate
+    where id_poberatela not in (select id_poberatela
+                                        from p_prispevky); 
+                                               
+-- 5.4.18
+select *
+    from p_poberatel
+        where id_poberatela not in (select id_poberatela
+                                               from p_prispevky);
+
+-- sú zamestnanci                                         
+select * 
+    from p_poistenie
+        where rod_cislo <> id_platitela;
+         
+select *
+    from p_platitel
+        where id_platitela not like '%/%';
+        
+select count(rod_cislo)
+        from p_poberatel pober join p_typ_prispevku on (pober.id_typu = p_typ_prispevku.id_typu)
+                where popis = 'nezamest' and rod_cislo in (select rod_cislo 
+                                                            from p_poistenie
+                                                                where rod_cislo <> id_platitela);
+
+update p_poberatel set dat_do = sysdate
+    where rod_cislo in (select rod_cislo
+                            from p_poberatel pober join p_typ_prispevku on (pober.id_typu = p_typ_prispevku.id_typu)
+                                 where popis = 'nezamest' and rod_cislo in (select rod_cislo 
+                                                            from p_poistenie
+                                                                where rod_cislo <> id_platitela));
+commit;
+
+-- 5.4.19
+
+select count(*)
+    from p_poistenie
+        where extract(year from dat_do) < 2000;
+        
+select *
+    from p_odvod_platba
+        where exists(select 'x'
+                        from p_poistenie
+                            where extract(year from dat_do) < 2000
+                            and p_poistenie.id_poistenca =  p_odvod_platba.id_poistenca);
+                            
+delete from p_odvod_platba
+        where exists(select 'x'
+                        from p_poistenie
+                            where extract(year from dat_do) < 2000
+                            and p_poistenie.id_poistenca =  p_odvod_platba.id_poistenca);
+                            
+delete from p_poistenie
+         where extract(year from dat_do) < 2000;
+rollback;
+
+-- 5.4.20
+ select rod_cislo
+            from p_poberatel
+                 where extract(year from sysdate) - extract(year from dat_do) > 10 ; 
+        
+        
+select count(*)
+    from p_prispevky
+        where id_poberatela in ( select id_poberatela
+                                    from p_poberatel
+                                         where extract(year from sysdate) - extract(year from dat_do) > 4 ); 
+                                         
+        
+delete from p_prispevky
+        where exists ( select 'x'
+                            from p_poberatel
+                                where extract(year from sysdate) - extract(year from dat_do) > 10
+                                and p_prispevky.id_poberatela = p_poberatel.id_poberatela); 
+rollback;
+        
+delete from p_poberatel
+            where extract(year from sysdate) - extract(year from dat_do) > 10 ; 
