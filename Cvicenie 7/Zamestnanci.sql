@@ -1,14 +1,17 @@
 -- Zamestnanci
-Create table  CV6_Zamestnanci (
-                         id int NOT NULL ,
-                         meno Varchar2 (20) NOT NULL ,
-                         priezvisko Varchar2 (30) NOT NULL ,
-                         nadriadeny int,
-                         primary key (id),
-                         foreign key (nadriadeny) references CV6_Zamestnanci (id)
+CREATE TABLE CV6_Zamestnanci
+(
+    id                   INTEGER NOT NULL ,
+    veduci               INTEGER NULL ,
+    meno                 Varchar2(20) NULL ,
+    priezvisko           Varchar2(20) NULL
 );
 
+ALTER TABLE CV6_Zamestnanci
+    ADD CONSTRAINT  XPKZamestnanci PRIMARY KEY (id);
+
+ALTER TABLE CV6_Zamestnanci
+    ADD (CONSTRAINT R_2 FOREIGN KEY (veduci) REFERENCES CV6_Zamestnanci (id) ON DELETE SET NULL);
+
 commit ;
-select *
-    from CV6_Zamestnanci;
 
