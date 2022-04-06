@@ -26,6 +26,9 @@ select id, meno, priezvisko, veduci
                             from CV6_Zamestnanci veduciZ
                                 where veduciZ.veduci is not null );
 -- kolegov na rovnakej úrovni
+select zames.id, zames.meno, zames.priezvisko, zames.veduci, kolega.veduci, kolega.meno, kolega.priezvisko, kolega.id
+    from CV6_Zamestnanci zames join CV6_Zamestnanci kolega on zames.veduci = kolega.veduci
+        where zames.id != kolega.id;
 
 -- ku každému zamestnanovi jeho primeho nadriadeného
 select zamestnanec.id, zamestnanec.meno, zamestnanec.priezvisko,veduciZ.meno as meno_Nadriadeneho, veduciZ.priezvisko as priezvisko_Nadriadeneho
