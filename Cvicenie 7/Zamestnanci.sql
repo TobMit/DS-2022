@@ -15,3 +15,9 @@ ALTER TABLE CV6_Zamestnanci
 
 commit ;
 
+-- zamestnancov ktorí nemajú žiadneho vedúceho
+select id ,meno, priezvisko
+    from CV6_Zamestnanci
+        where veduci is null ;
+-- zamestnancov ktorí nemajú podriadeného
+
