@@ -25,3 +25,10 @@ select id, meno, priezvisko, veduci
         where id not in (select veduci
                             from CV6_Zamestnanci veduciZ
                                 where veduciZ.veduci is not null );
+-- kolegov na rovnakej úrovni
+
+-- ku každému zamestnanovi jeho primeho nadriadeného
+select zamestnanec.id, zamestnanec.meno, zamestnanec.priezvisko,veduciZ.meno as meno_Nadriadeneho, veduciZ.priezvisko as priezvisko_Nadriadeneho
+    from CV6_Zamestnanci zamestnanec join CV6_Zamestnanci  veduciZ on (zamestnanec.veduci = veduciZ.id)
+        where zamestnanec.veduci is not null;
+
