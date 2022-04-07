@@ -89,5 +89,31 @@ select NAZOV
             having count(CIS_PREDM) > 4;
 
 -- 7.1.6
+select distinct MENO, PRIEZVISKO
+    from OS_UDAJE join STUDENT S on (OS_UDAJE.ROD_CISLO = S.ROD_CISLO)
+        join ZAP_PREDMETY using (os_cislo)
+            group by SKROK, os_cislo, MENO, PRIEZVISKO
+                having count(SKROK) > 1;
 
+-- 7.1.7
+select MENO, PRIEZVISKO, count(CIS_PREDM)
+    from OS_UDAJE join STUDENT S on (OS_UDAJE.ROD_CISLO = S.ROD_CISLO)
+              join ZAP_PREDMETY using (os_cislo)
+                where SKROK = 2006
+                    group by MENO, PRIEZVISKO;
 
+-- 7.1.8
+select CIS_PREDM
+    from ST_PROGRAM
+        where SKROK = 2006 and not exists(select 'x'
+                                            from ZAP_PREDMETY
+                                                where skrok = 2006
+                                                and ST_PROGRAM.CIS_PREDM = ZAP_PREDMETY.CIS_PREDM);
+
+select CIS_PREDM
+from ST_PROGRAM
+where SKROK = 2006 and CIS_PREDM not in (select cis_predm
+                                  from ZAP_PREDMETY
+                                  where skrok = 2006);
+
+-- 7.1.9
