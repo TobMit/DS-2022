@@ -61,3 +61,33 @@ select rod_cislo, rok, sum (celkova_suma)
 -- 7.1.1
 select max(substr(extract(year from ukoncenie), 3) - substr(rod_cislo, 1, 2) + 100) as najstarsi_Ukoncenie
 from STUDENT;
+
+-- 7.1.2 -- vyťiahnutie mesiaca
+select meno, PRIEZVISKO, ROD_CISLO
+    from OS_UDAJE
+        where (case substr(ROD_CISLO, 3,2) when '51' then '11' when '52' then '12'  else substr(ROD_CISLO, 3,2 )end) = (extract(month from sysdate) + 1)
+-- 7.1.3
+select min(znamka),max(znamka), count(os_cislo), CIS_PREDM
+    from (
+         select (case VYSLEDOK when 'A' then 1 when 'B' then 1.5 when 'C' then 2 when 'D' then 2.5 when 'E' then 3 when 'F' then 4 when null then 4 end) as znamka,  CIS_PREDM, OS_CISLO
+                from ZAP_PREDMETY)
+        group by CIS_PREDM;
+
+-- 7.1.4
+select MENO, PRIEZVISKO, avg(case VYSLEDOK when 'A' then 1 when 'B' then 1.5 when 'C' then 2 when 'D' then 2.5 when 'E' then 3 when 'F' then 4 when null then 4 end) as priemer , OS_CISLO
+from OS_UDAJE join STUDENT using (rod_cislo) join ZAP_PREDMETY using (os_cislo)
+        group by os_cislo, MENO, PRIEZVISKO;
+
+select count(distinct os_Cislo)
+    from ZAP_PREDMETY;
+
+-- 7.1.5
+select NAZOV
+    from PREDMET join ZAP_PREDMETY using (cis_predm)
+        where SKROK = 2006
+        group by CIS_PREDM, NAZOV
+            having count(CIS_PREDM) > 4;
+
+-- 7.1.6
+
+
