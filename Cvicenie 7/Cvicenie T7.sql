@@ -145,3 +145,20 @@ select st_odbor, count(*) as pocet_studentov
     from STUDENT
         group by st_odbor;
 
+-- 7.1.13
+select *
+    from ZAP_PREDMETY
+        where OS_CISLO = '500439'
+        and CIS_PREDM in (select CIS_PREDM
+                            from ST_PROGRAM
+                                where TYP_POVIN = 'V');
+-- 7.1.14
+select NAZOV, count(OS_CISLO) as pocet_Studentov
+    from PREDMET join ZAP_PREDMETY using(cis_predm)
+        where CIS_PREDM in (select CIS_PREDM
+                                from ST_PROGRAM
+                                    where skrok = 2008 and TYP_POVIN = 'P')
+        group by NAZOV;
+
+select *
+from ST_PROGRAM;
