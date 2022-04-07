@@ -116,4 +116,32 @@ where SKROK = 2006 and CIS_PREDM not in (select cis_predm
                                   from ZAP_PREDMETY
                                   where skrok = 2006);
 
--- 7.1.9
+-- 7.1.9 -- císla my zam vychádzajú zaporne, zrejme to je naprd nahraté v databaze, kedze zápocet sa konal neskôr ako skúska
+select CIS_PREDM,to_char(ZAPOCET, 'DD-MM-YYYY') as zapocet, to_char(DATUM_SK, 'DD-MM-YYYY') as skuska, DATUM_SK - ZAPOCET as pocet_dni
+    from ZAP_PREDMETY
+        where ZAPOCET is not null and DATUM_SK is not null;
+
+-- 7.1.10 -- podmienku mesiada dávam opacne aby mi aspon nieco vyhodilo, kedze majú zle nahraté dátumi alebo sa to musím opýtať
+select CIS_PREDM,to_char(ZAPOCET, 'DD-MM-YYYY') as zapocet, to_char(DATUM_SK, 'DD-MM-YYYY') as skuska, DATUM_SK - ZAPOCET as pocet_dni
+    from ZAP_PREDMETY
+        where ZAPOCET is not null and DATUM_SK is not null and ((extract(month from ZAPOCET) + 1) <= extract(month from DATUM_SK));
+-- 7.1.11
+select meno, PRIEZVISKO
+    from OS_UDAJE
+        where ROD_CISLO not in (select ROD_CISLO
+                                from STUDENT join ZAP_PREDMETY using (os_cislo)
+                                    group by SKROK, os_cislo, ROD_CISLO
+                                        having count(SKROK) > 1);
+
+-- 7.1.12a
+select count(*)
+from STUDENT;
+-- 7.1.12b
+select ROCNIK, count(*) as pocet_studentov
+    from STUDENT
+        group by ROCNIK;
+-- 7.1.12c
+select st_odbor, count(*) as pocet_studentov
+    from STUDENT
+        group by st_odbor;
+
