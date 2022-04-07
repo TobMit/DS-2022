@@ -57,3 +57,7 @@ select rod_cislo, rok, sum (celkova_suma)
                     group by to_char(obdobie,'YYYY'), rod_cislo
          )
             GROUP BY rod_cislo, rok;
+
+-- 7.1.1
+select max(substr(extract(year from ukoncenie), 3) - substr(rod_cislo, 1, 2) + 100) as najstarsi_Ukoncenie
+from STUDENT;
