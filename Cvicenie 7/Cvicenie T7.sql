@@ -162,3 +162,33 @@ select NAZOV, count(OS_CISLO) as pocet_Studentov
 
 select *
 from ST_PROGRAM;
+
+-- 7.2.1
+select nazov, count(*) as pocet_zamestnancov
+    from P_ZAMESTNANEC join P_ZAMESTNAVATEL PZ on PZ.ICO = P_ZAMESTNANEC.ID_ZAMESTNAVATELA
+        where NAZOV = 'Tesco'
+            group by nazov;
+
+-- 7.2.2
+select (case when substr(ROD_CISLO, 1,2) < to_char(sysdate, 'YY') then to_char(sysdate, 'YY') -  substr(ROD_CISLO, 1,2)
+    else 100 + to_char(sysdate, 'YY') -  substr(ROD_CISLO, 1,2) end) rok_narodenia,
+    count(ROD_CISLO) pocet_Ludi
+from P_POISTENIE
+    where OSLOBODENY = 'A' or OSLOBODENY = 'a'
+        group by substr(ROD_CISLO, 1,2)
+        order by rok_narodenia;
+
+-- 7.2.3
+select MENO, PRIEZVISKO
+    from P_OSOBA join P_POISTENIE using (rod_cislo)
+        where ROD_CISLO not in (select  ROD_CISLO
+                                    from P_POBERATEL)
+        and (OSLOBODENY = 'A' or OSLOBODENY = 'a');
+
+-- 7.2.4
+select meno, PRIEZVISKO, sum (SUMA)
+    from P_OSOBA join P_POISTENIE using (rod_cislo) join P_ODVOD_PLATBA using (id_poistenca)
+        where extract(month from DAT_PLATBY) =  extract(month from sysdate) -1
+            group by meno, PRIEZVISKO;
+
+--
