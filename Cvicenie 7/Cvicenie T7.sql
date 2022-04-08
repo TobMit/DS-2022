@@ -223,3 +223,8 @@ select meno, PRIEZVISKO
                                                                         from P_ODVOD_PLATBA)));
 
 -- 7.2.10
+select extract(month from DAT_PLATBY) as mesiac, sum(SUMA)
+    from P_ODVOD_PLATBA
+        where extract(year from DAT_PLATBY) =  extract(year from sysdate) - 1
+            group by DAT_PLATBY;
+
