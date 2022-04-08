@@ -228,3 +228,7 @@ select extract(month from DAT_PLATBY) as mesiac, sum(SUMA)
         where extract(year from DAT_PLATBY) =  extract(year from sysdate) - 1
             group by DAT_PLATBY;
 
+-- 7.2.11 - nedokoncene
+select ID_POISTENCA
+    from P_ODVOD_PLATBA
+        where last_day(add_months(OBDOBIE,1)) < DAT_PLATBY;
