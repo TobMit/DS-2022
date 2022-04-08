@@ -191,4 +191,19 @@ select meno, PRIEZVISKO, sum (SUMA)
         where extract(month from DAT_PLATBY) =  extract(month from sysdate) -1
             group by meno, PRIEZVISKO;
 
---
+-- 7.2.5
+select clovek.meno, clovek.priezvisko, menocvec.meno, menocvec.priezvisko
+    from P_OSOBA  clovek join p_osoba menocvec on (clovek.priezvisko = menocvec.PRIEZVISKO)
+        where clovek.ROD_CISLO != menocvec.ROD_CISLO;
+
+--7.2.6
+select ROD_CISLO
+    from P_POBERATEL
+        group by ROD_CISLO
+            having count(ROD_CISLO) > 1;
+
+-- 7.2.7
+select ROD_CISLO, count(ID_TYPU)
+    from P_POBERATEL
+        group by ROD_CISLO, ID_TYPU;
+
