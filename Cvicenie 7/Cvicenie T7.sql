@@ -207,3 +207,19 @@ select ROD_CISLO, count(ID_TYPU)
     from P_POBERATEL
         group by ROD_CISLO, ID_TYPU;
 
+-- 7.2.8
+select ROD_CISLO, prvy.DAT_OD, prvy.DAT_DO, druhy.DAT_DO, druhy.DAT_OD
+    from P_POBERATEL prvy join P_POBERATEL druhy using (rod_cislo)
+        where prvy.DAT_OD != druhy.DAT_OD and prvy.DAT_OD > druhy.DAT_DO or druhy.DAT_DO is null;
+
+-- 7.2.9
+select meno, PRIEZVISKO
+    from P_OSOBA
+        where ROD_CISLO in
+                (select ROD_CISLO
+                    from P_POISTENIE full outer join P_ODVOD_PLATBA POP on (P_POISTENIE.ID_POISTENCA = POP.ID_POISTENCA)
+                        where (DAT_DO is null or DAT_DO > sysdate) and ((extract(month from DAT_PLATBY) > extract(month from sysdate) - 6)
+                                or  P_POISTENIE.ID_POISTENCA not in (select ID_POISTENCA
+                                                                        from P_ODVOD_PLATBA)));
+
+-- 7.2.10
