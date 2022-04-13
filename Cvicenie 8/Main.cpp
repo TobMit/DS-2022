@@ -15,6 +15,7 @@ int main() {
     string delimiter = ";";
     if (citac.is_open()) {
         size_t pos = 0;
+        // nacita iba jedno meno
         while (getline(citac,nacitane)) {
             citac >> nacitane;
             pos = nacitane.find(delimiter);
