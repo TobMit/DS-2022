@@ -10,7 +10,7 @@ int main() {
     fstream citac;
 
     citac.open("../Cvicenie 8/name_calendar.csv");
-    zapisovac.open("../Cvicenie 8/day_calendar.unl");
+    zapisovac.open("../Cvicenie 8/name_day_calendar.unl");
     string  nacitane;
     string delimiter = ";";
     if (citac.is_open()) {
