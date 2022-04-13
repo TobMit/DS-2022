@@ -1,10 +1,10 @@
 LOAD DATA
-INFILE 'day_calendar.unl'
+INFILE 'name_day_calendar.unl'
 INTO TABLE name_day_calendar
 
 FIELDS TERMINATED BY '|'
 (
-  datum,
+  datum DATE 'MM/DD/YYYY',
   meno
 )
 
