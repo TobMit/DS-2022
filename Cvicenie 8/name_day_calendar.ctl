@@ -1,12 +1,10 @@
 LOAD DATA
 INFILE 'day_calendar.unl'
-INTO TABLE CV6_Zamestnanci
+INTO TABLE name_day_calendar
 
 FIELDS TERMINATED BY '|'
 (
-  id,
-  meno,
-  priezvisko,
-  veduci
+  datum,
+  meno
 )
 
