@@ -4,7 +4,7 @@ INTO TABLE name_day_calendar
 
 FIELDS TERMINATED BY '|'
 (
-  datum DATE 'MM/DD/YYYY',
+  datum DATE 'DD/MM/YYYY',
   meno
 )
 
