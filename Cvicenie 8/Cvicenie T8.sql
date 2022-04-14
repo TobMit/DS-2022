@@ -92,3 +92,6 @@ end;
 -- 8.1.3
 select f_Vyskladaj_skupinu('Z',100, 0, 1, 2) as vyskladana_Skupina
     from DUAL;
+
+select *
+from STUDENT where rocnik = &vstup_cislo;
