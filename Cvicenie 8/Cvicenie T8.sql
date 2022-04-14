@@ -52,3 +52,18 @@ end;
 variable hodnota_veku number;
 EXEC :hodnota_veku:=GetVek('571224/1234');
 print hodnota_veku;
+
+create or replace procedure Vyskladaj_skupinu
+(paracovisko char, odbor integer, zameranie integer, rocnik char, kruzok char, st_skupina OUT char)
+IS
+    skratka char(2);
+BEGIN
+    select sk_odbor || sk_zamer into skratka
+        from PRIKLAD_DB2.st_odbory
+            where c_st_odboru = odbor
+                and c_specializacie = zameranie;
+    st_skupina = '5' || pracovisko || skratka || rocnik || kruzok;
+end;
+/
+select *
+    from PRIKLAD_DB2.st_odbory;
