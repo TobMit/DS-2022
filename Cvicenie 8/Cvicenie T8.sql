@@ -101,7 +101,7 @@ undefine vstup_cislo;
 
 -- funkcia s 2 parametrami - cislo predmetu a nazov predmetu
 -- treba skontrolovat ci su not null, ak s√∫ not null, skontrolujem ci take cislo predmetu ut nie je, ak nie je , vlozim ho
-CREATE or replace function skontroluj_predmet(cislo_predmetu integer, nazov_predmetu char)
+CREATE or replace function skontroluj_predmet(cislo_predmetu char, nazov_predmetu char)
 return integer
 is
     pocet_predmetov integer;
@@ -116,3 +116,8 @@ BEGIN
     end if;
 end;
 /
+-- select nezavol·me ke? modifikuje d·ta
+variable vysledok number;
+exec :vysledok:=skontroluj_predmet('I123','INF');
+print vysledok;
+
