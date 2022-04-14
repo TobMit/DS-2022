@@ -53,6 +53,8 @@ variable hodnota_veku number;
 EXEC :hodnota_veku:=GetVek('571224/1234');
 print hodnota_veku;
 
+
+-- 8.1.1
 create or replace procedure Vyskladaj_skupinu
 (paracovisko char, odbor st_odbory.st_odbor%type, zameranie integer, rocnik char, kruzok char, st_skupina OUT char)
 IS
@@ -67,11 +69,12 @@ end;
 /
 select *
     from PRIKLAD_DB2.st_odbory;
-    
+
 variable skupina char(6);
 exec Vyskladaj_skupinu('Z',100, 0, 1, 2, :skupina);
 print skupina;
 
+-- 8.1.2
 create or replace function f_Vyskladaj_skupinu
 (paracovisko char, odbor st_odbory.st_odbor%type, zameranie integer, rocnik char, kruzok char)
 return char
@@ -86,5 +89,6 @@ BEGIN
 end;
 /
 
+-- 8.1.3
 select f_Vyskladaj_skupinu('Z',100, 0, 1, 2) as vyskladana_Skupina
     from DUAL;
