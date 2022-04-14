@@ -106,7 +106,7 @@ return integer
 is
     pocet_predmetov integer;
 BEGIN
-    if cislo_predmetu is NULL or nazov_predmetu in null then return 0;
+    if cislo_predmetu is NULL or nazov_predmetu is null then return 0;
     end if;
     select count(*) into pocet_predmetov from PREDMET
         where cislo_predmetu = CIS_PREDM;
@@ -115,3 +115,4 @@ BEGIN
     else return 0;
     end if;
 end;
+/
