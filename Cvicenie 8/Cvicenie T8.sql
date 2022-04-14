@@ -71,3 +71,20 @@ select *
 variable skupina char(6);
 exec Vyskladaj_skupinu('Z',100, 0, 1, 2, :skupina);
 print skupina;
+
+create or replace function f_Vyskladaj_skupinu
+(paracovisko char, odbor st_odbory.st_odbor%type, zameranie integer, rocnik char, kruzok char)
+return char
+IS
+    skratka char(2);
+BEGIN
+    select sk_odbor || sk_zamer into skratka
+    from PRIKLAD_DB2.st_odbory
+    where c_st_odboru = odbor
+      and c_specializacie = zameranie;
+    return '5' || paracovisko || skratka || rocnik || kruzok;
+end;
+/
+
+select f_Vyskladaj_skupinu('Z',100, 0, 1, 2) as vyskladana_Skupina
+    from DUAL;
