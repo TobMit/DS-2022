@@ -32,3 +32,10 @@ end;
 
 select GetVek(ROD_CISLO)
     from PRIKLAD_DB2.os_udaje;
+
+declare
+    vek number;
+BEGIN
+    vek:=GETVEK('571224/1234');
+    DBMS_OUTPUT.PUT_LINE(vek);
+end;
