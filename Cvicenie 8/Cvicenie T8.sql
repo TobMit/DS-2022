@@ -54,7 +54,7 @@ EXEC :hodnota_veku:=GetVek('571224/1234');
 print hodnota_veku;
 
 create or replace procedure Vyskladaj_skupinu
-(paracovisko char, odbor integer, zameranie integer, rocnik char, kruzok char, st_skupina OUT char)
+(paracovisko char, odbor st_odbory.st_odbor%type, zameranie integer, rocnik char, kruzok char, st_skupina OUT char)
 IS
     skratka char(2);
 BEGIN
@@ -67,3 +67,7 @@ end;
 /
 select *
     from PRIKLAD_DB2.st_odbory;
+    
+variable skupina char(6);
+exec Vyskladaj_skupinu('Z',100, 0, 1, 2, : skupina);
+print skupina;
