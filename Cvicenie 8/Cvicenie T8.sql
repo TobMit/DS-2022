@@ -95,6 +95,23 @@ select f_Vyskladaj_skupinu('Z',100, 0, 1, 2) as vyskladana_Skupina
 
 select *
 from STUDENT where rocnik = &vstup_cislo;
--- ked sú tam && tak ti prememenna hodnotu ulozi
+-- ked sï¿½ tam && tak ti prememenna hodnotu ulozi
 -- potom treba undefine vstup_cislo;
 undefine vstup_cislo;
+
+-- funkcia s 2 parametrami - cislo predmetu a nazov predmetu
+-- treba skontrolovat ci su not null, ak sÃº not null, skontrolujem ci take cislo predmetu ut nie je, ak nie je , vlozim ho
+CREATE or replace function skontroluj_predmet(cislo_predmetu integer, nazov_predmetu char)
+return integer
+is
+    pocet_predmetov integer;
+BEGIN
+    if cislo_predmetu is NULL or nazov_predmetu in null then return 0;
+    end if;
+    select count(*) into pocet_predmetov from PREDMET
+        where cislo_predmetu = CIS_PREDM;
+    if pocet_predmetov = 0 then insert into PREDMET values (cislo_predmetu, nazov_predmetu);
+        return 1;
+    else return 0;
+    end if;
+end;
