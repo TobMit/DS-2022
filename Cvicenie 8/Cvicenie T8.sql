@@ -62,7 +62,7 @@ BEGIN
         from PRIKLAD_DB2.st_odbory
             where c_st_odboru = odbor
                 and c_specializacie = zameranie;
-    st_skupina = '5' || pracovisko || skratka || rocnik || kruzok;
+    st_skupina:= '5' || paracovisko || skratka || rocnik || kruzok;
 end;
 /
 select *
