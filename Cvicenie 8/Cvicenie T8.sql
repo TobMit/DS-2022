@@ -25,5 +25,10 @@ BEGIN
                 || '.19' || substr(p_rc, 1, 2);
     datum_narodenia:= to_date(vstupny_ret,'DD.MM.YYYY');
     return months_between(sysdate, datum_narodenia)/12;
+    EXCEPTION
+        when others then return -1;
 end;
 /
+
+select GetVek(ROD_CISLO)
+    from PRIKLAD_DB2.os_udaje;
