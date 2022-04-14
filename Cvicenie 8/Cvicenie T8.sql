@@ -99,6 +99,8 @@ from STUDENT where rocnik = &vstup_cislo;
 -- potom treba undefine vstup_cislo;
 undefine vstup_cislo;
 
+
+-- 8.1.4
 -- funkcia s 2 parametrami - cislo predmetu a nazov predmetu
 -- treba skontrolovat ci su not null, ak sú not null, skontrolujem ci take cislo predmetu ut nie je, ak nie je , vlozim ho
 CREATE or replace function skontroluj_predmet(cislo_predmetu char, nazov_predmetu char)
@@ -121,3 +123,37 @@ variable vysledok number;
 exec :vysledok:=skontroluj_predmet('I123','INF');
 print vysledok;
 
+-- 8.1.6
+create or replace function pocet_studentov(cislo_premetu char, sk_rok integer)
+ return number
+is
+    vysledok number;
+begin
+    select count(*) into VYSLEDOK
+        from STUDENT join ZAP_PREDMETY using (os_cislo) join PREDMET using (cis_predm)
+            where CIS_PREDM = cislo_premetu
+                and SKROK = sk_rok;
+    return vysledok;
+end;
+/
+
+select pocet_studentov('BH09', 2008) from DUAL;
+
+-- 8.2.4 -- pred tým zavolať select coutn a scitať, alebo sql%rowcount (ten vráti počet záznamov)
+create or replace function Zrus_predmet (cislo_predmetu integer)
+return number
+is
+    pocet integer;
+begin
+    delete ZAP_PREDMETY
+        where CIS_PREDM = cislo_predmetu;
+    pocet := sql%rowcount;
+    delete ST_PROGRAM
+        where CIS_PREDM = cislo_predmetu;
+    delete PREDMET_BOD
+        where CIS_PREDM = cislo_predmetu;
+    delete PREDMET
+        where cislo_predmetu = CIS_PREDM;
+    return pocet;
+end;
+/
