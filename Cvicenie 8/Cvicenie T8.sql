@@ -95,3 +95,6 @@ select f_Vyskladaj_skupinu('Z',100, 0, 1, 2) as vyskladana_Skupina
 
 select *
 from STUDENT where rocnik = &vstup_cislo;
+-- ked sú tam && tak ti prememenna hodnotu ulozi
+-- potom treba undefine vstup_cislo;
+undefine vstup_cislo;
