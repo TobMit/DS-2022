@@ -39,3 +39,16 @@ BEGIN
     vek:=GETVEK('571224/1234');
     DBMS_OUTPUT.PUT_LINE(vek);
 end;
+/
+
+declare
+    vek number;
+BEGIN
+    select GetVek('571224/1234') into vek from dual;
+    DBMS_OUTPUT.PUT_LINE(vek);
+end;
+/
+
+variable hodnota_veku number;
+EXEC :hodnota_veku:=GetVek('571224/1234');
+print hodnota_veku;
