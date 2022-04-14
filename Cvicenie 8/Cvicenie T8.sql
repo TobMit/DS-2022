@@ -116,7 +116,7 @@ BEGIN
     end if;
 end;
 /
--- select nezavoláme ke? modifikuje dáta
+-- select nezavolame ked modifikuje data
 variable vysledok number;
 exec :vysledok:=skontroluj_predmet('I123','INF');
 print vysledok;
