@@ -69,5 +69,5 @@ select *
     from PRIKLAD_DB2.st_odbory;
     
 variable skupina char(6);
-exec Vyskladaj_skupinu('Z',100, 0, 1, 2, : skupina);
+exec Vyskladaj_skupinu('Z',100, 0, 1, 2, :skupina);
 print skupina;
