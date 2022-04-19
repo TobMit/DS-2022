@@ -2,11 +2,13 @@
 CREATE TABLE name_day_calendar
 (
     datum                 DATE NOT NULL ,
-    meno                 Varchar2(20) NULL,
+    meno                 Varchar2(30) NULL,
 
     primary key(datum)
 );
 commit ;
+
+drop table name_day_calendar;
 
 ---------- procedúra vrati meno menin podla datumu --------------------------
 CREATE OR REPLACE FUNCTION name_day(p_datum date)

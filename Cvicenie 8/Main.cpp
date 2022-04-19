@@ -27,7 +27,13 @@ int main() {
                 zapisovac << nacitane.substr(0, pos);
                 nacitane.erase(0, pos + delimiter.length());
             }
-            zapisovac << "|" << endl;
+            if (nacitane.size() > 2) {
+                pos = nacitane.find("\r");
+                zapisovac << nacitane.substr(0, pos) << "|" << endl;
+            } else
+            {
+                zapisovac << "|" << endl;
+            }
 
         }
     }
