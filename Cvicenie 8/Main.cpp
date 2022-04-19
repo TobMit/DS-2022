@@ -6,6 +6,7 @@ using namespace std;
 
 
 int main() {
+    /// Treba vždy zo súboru odstraniť utf 8 bom - cez hex editor prvé tri byty
     ofstream zapisovac;
     fstream citac;
 
