@@ -13,15 +13,22 @@ int main() {
     zapisovac.open("../Cvicenie 8/name_day_calendar.unl");
     string  nacitane;
     string delimiter = ";";
+
     if (citac.is_open()) {
         size_t pos = 0;
         // nacita iba jedno meno
+
         while (getline(citac,nacitane)) {
-            citac >> nacitane;
             pos = nacitane.find(delimiter);
-            zapisovac << nacitane.substr(0, pos)<< "|";
+            zapisovac << nacitane.substr(0, pos) << "|";
             nacitane.erase(0, pos + delimiter.length());
-            zapisovac << nacitane << "|" << endl;
+
+            while ((pos = nacitane.find(delimiter)) != string::npos) {
+                zapisovac << nacitane.substr(0, pos);
+                nacitane.erase(0, pos + delimiter.length());
+            }
+            zapisovac << "|" << endl;
+
         }
     }
     zapisovac.close();
