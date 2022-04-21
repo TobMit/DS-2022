@@ -101,8 +101,27 @@ update ZAP_PREDMETY set SKROK = SKROK, ZAP_PREDMETY.uzivatel = 'TEST';
 commit;
 
 -- 9.1.2
+create or replace trigger kontola_opakovania_predmetov
+    before insert on ZAP_PREDMETY
+    for each row
+    declare
+        pocet integer;
+    begin
+        select count(CIS_PREDM) into pocet
+            from ZAP_PREDMETY
+                where OS_CISLO = :new.os_cislo and CIS_PREDM = :new.cis_predm
+                group by OS_CISLO;
+        if pocet >= 1 then raise_application_error(-20001, 'Ziak nemoze ten isty predmet viac krat'); end if;
+    end;
+/
 
+insert into ZAP_PREDMETY(os_cislo, cis_predm, skrok, prednasajuci, ects)
+    values (500428,'IN05',2005,'KI001',1);
 
-
+select *
+    from ZAP_PREDMETY
+        where OS_CISLO = '500428';
+drop trigger kontola_opakovania_predmetov;
+rollback;
 
 
