@@ -97,8 +97,10 @@ create or replace trigger logger_zap_predmety
     end;
 /
 
-update ZAP_PREDMETY set SKROK = SKROK;
+update ZAP_PREDMETY set SKROK = SKROK, ZAP_PREDMETY.uzivatel = 'TEST';
 commit;
+
+-- 9.1.2
 
 
 
