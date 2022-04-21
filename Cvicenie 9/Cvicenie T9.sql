@@ -240,3 +240,26 @@ insert into zap_predmety (os_cislo, cis_predm, skrok, prednasajuci, ects)
 delete ZAP_PREDMETY
     where OS_CISLO = 8 and CIS_PREDM = 'BI30';
 rollback;
+
+-- 9.1.6
+
+create or replace trigger doplnenie_ects
+    before insert on ZAP_PREDMETY
+    for each row
+    declare
+        hodnota_ects number;
+    begin
+        if :new.ects is null then
+            select ECTS into hodnota_ects
+                from PREDMET_BOD
+                    where CIS_PREDM = :new.cis_predm
+                    and SKROK = :new.skrok;
+        end if;
+
+        :new.ects := hodnota_ects;
+    end;
+
+insert into zap_predmety (os_cislo, cis_predm, skrok, prednasajuci)
+    values (8, 'BI30', 2009, 'KI003');
+rollback;
+
