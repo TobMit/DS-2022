@@ -79,3 +79,28 @@ alter trigger datum disable;
 update P_PRISPEVKY set SUMA = SUMA;
 select * from P_PRISPEVKY;
 
+-- 9.1.1
+alter table ZAP_PREDMETY
+    add uzivatel varchar2(30);
+alter table ZAP_PREDMETY
+    add dat_zmeny date;
+
+select *
+    from ZAP_PREDMETY;
+
+create or replace trigger logger_zap_predmety
+    before insert or update on zap_predmety
+    for each row
+    begin
+        :NEW.uzivatel := user;
+        :new.dat_zmeny := sysdate;
+    end;
+/
+
+update ZAP_PREDMETY set SKROK = SKROK;
+commit;
+
+
+
+
+
