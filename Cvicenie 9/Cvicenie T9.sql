@@ -169,4 +169,56 @@ update STUDENT
     set OS_CISLO = 9
         where OS_CISLO = 8;
 
---
+-- 9.1.4
+CREATE TABLE zap_predmety_log as
+(
+    select * from ZAP_PREDMETY
+        where OS_CISLO = 7
+);
+-- je tam nexistujúci zaznam kôli tomu aby mi to dalo iba atribúty správne nastavené a žiaden záznam
+alter table zap_predmety_log
+    add operacia varchar2(15);
+
+select *
+    from zap_predmety_log;
+
+select *
+    from ZAP_PREDMETY
+        order by OS_CISLO;
+
+create or replace trigger zap_predmety_insert
+    before insert on zap_predmety
+    for each row
+    begin
+        insert into zap_predmety_log(OS_CISLO, CIS_PREDM, SKROK, PREDNASAJUCI, ECTS, ZAPOCET, VYSLEDOK, DATUM_SK, UZIVATEL, DAT_ZMENY, operacia)
+            values (:new.OS_CISLO, :new.CIS_PREDM, :new.SKROK, :new.PREDNASAJUCI, :new.ECTS, :new.ZAPOCET, :new.VYSLEDOK, :new.DATUM_SK, user, sysdate, 'insert');
+    end;
+/
+
+create or replace trigger zap_predmety_update
+    before update on zap_predmety
+    for each row
+    begin
+        insert into zap_predmety_log(OS_CISLO, CIS_PREDM, SKROK, PREDNASAJUCI, ECTS, ZAPOCET, VYSLEDOK, DATUM_SK, UZIVATEL, DAT_ZMENY, operacia)
+            values (:old.OS_CISLO, :old.CIS_PREDM, :old.SKROK, :old.PREDNASAJUCI, :old.ECTS, :old.ZAPOCET, :old.VYSLEDOK, :old.DATUM_SK, user, sysdate, 'update');
+    end;
+/
+
+create or replace trigger zap_predmety_delete
+    before delete on zap_predmety
+    for each row
+begin
+    insert into zap_predmety_log(OS_CISLO, CIS_PREDM, SKROK, PREDNASAJUCI, ECTS, ZAPOCET, VYSLEDOK, DATUM_SK, UZIVATEL, DAT_ZMENY, operacia)
+    values (:old.OS_CISLO, :old.CIS_PREDM, :old.SKROK, :old.PREDNASAJUCI, :old.ECTS, :old.ZAPOCET, :old.VYSLEDOK, :old.DATUM_SK, user, sysdate, 'delete');
+end;
+/
+
+insert into zap_predmety (os_cislo, cis_predm, skrok, prednasajuci, ects)
+    values (8, 'BI30', 2022, 'KI003', 5);
+
+update zap_predmety
+    set os_cislo = 8, cis_predm ='BI30' , skrok = 2021, prednasajuci = 'KI003', ects = 5
+        where OS_CISLO = 8 and CIS_PREDM = 'BI30';
+
+delete ZAP_PREDMETY
+    where OS_CISLO = 8 and CIS_PREDM = 'BI30';
