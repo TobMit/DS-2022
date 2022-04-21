@@ -60,3 +60,22 @@ create or replace trigger automatickeNastavenie
         :new.suma :=(percentualneho * prispevku);
     end;
     /
+-- nemôzem tam spravit insert do p_prispevky pretoze by sa znovu sputil triger atď
+
+-- rozsirit p_prispevky o dasli atribut, ktori bude ukazovat kto modifikoval data
+alter table P_PRISPEVKY
+    add upravoval varchar2(30);
+
+-- spravit triger ktori tieto hodnoty nastavi
+create or replace trigger upravil_
+    before insert or update on P_PRISPEVKY
+    for each row
+    begin
+        :NEW.upravoval := user;
+    end;
+    /
+
+alter trigger datum disable;
+update P_PRISPEVKY set SUMA = SUMA;
+select * from P_PRISPEVKY;
+
