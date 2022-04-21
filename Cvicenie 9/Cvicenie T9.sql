@@ -259,7 +259,9 @@ create or replace trigger doplnenie_ects
         :new.ects := hodnota_ects;
     end;
 
+-- 9.1.7
 insert into zap_predmety (os_cislo, cis_predm, skrok, prednasajuci)
     values (8, 'BI30', 2009, 'KI003');
 rollback;
-
+-- 9.1.8
+drop trigger doplnenie_ects;
