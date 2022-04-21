@@ -41,4 +41,22 @@ alter trigger SUMA_ enable;
 -- riesenie: dat dva trigre do jedneho
 -- alebo v novom oracle ma follows a potom to vieme definovat
 
---
+-- triger ktory automatizovanie nastavi hodnotu sumy pre tabulku p_prispevky
+-- vypocita sa to na zaklade zakladnej sumy pre dany typ prispevku (p_typ_prispevku)
+-- a precentualneho vyjadrenia pruslusnosti daneho poberatela
+create or replace trigger automatickeNastavenie
+    before insert or update on P_PRISPEVKY
+    for each row
+    declare
+        prispevku number;
+        percentualneho number;
+    begin
+        select ZAKL_VYSKA into prispevku
+            from P_TYP_PRISPEVKU
+                where :new.ID_TYPU = P_TYP_PRISPEVKU.ID_TYPU;
+        select PERC_VYJ into percentualneho
+            from P_POBERATEL
+                where P_POBERATEL.ID_POBERATELA = :new.id_poberatela;
+        :new.suma :=(percentualneho * prispevku);
+    end;
+    /
