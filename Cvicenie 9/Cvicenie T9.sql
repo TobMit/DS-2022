@@ -17,3 +17,8 @@ create or replace trigger suma_
 update P_PRISPEVKY set suma = -100;
 -- nemusím dávať rollback keďže sa žiadne data nemodifikovali
 alter trigger suma_ disable;
+
+-- chcek constrain ako triger
+alter table P_PRISPEVKY
+    add check ( SUMA >= 0 );
+
