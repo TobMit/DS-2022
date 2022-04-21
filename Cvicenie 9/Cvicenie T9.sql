@@ -123,5 +123,50 @@ select *
         where OS_CISLO = '500428';
 drop trigger kontola_opakovania_predmetov;
 rollback;
+---------------------------------
+-- vytvoril som si proceduru aby som pre oba trigre nemusel dupliokvat ten isty kod
+create or replace procedure zmena_os(NEW_OS_CISLO number , OLD_OS_CISLO number) is
+begin
+    insert into STUDENT(OS_CISLO,ST_ODBOR, ST_ZAMERANIE, ROD_CISLO, ROCNIK, ST_SKUPINA, STAV, UKONCENIE, DAT_ZAPISU)
+        select NEW_OS_CISLO,ST_ODBOR, ST_ZAMERANIE, ROD_CISLO, ROCNIK, ST_SKUPINA, STAV, UKONCENIE, DAT_ZAPISU
+            from STUDENT
+                where os_Cislo = OLD_OS_CISLO;
+    update ZAP_PREDMETY
+        set OS_CISLO = NEW_OS_CISLO
+            where OS_CISLO = OLD_OS_CISLO;
+    delete from STUDENT
+        where OS_CISLO = OLD_OS_CISLO;
+end;
+/
+-- 9.1.3
 
+rollback;
 
+insert into STUDENT(OS_CISLO,ST_ODBOR, ST_ZAMERANIE, ROD_CISLO, ROCNIK, ST_SKUPINA, STAV, UKONCENIE, DAT_ZAPISU)
+    select OS_CISLO + 1,ST_ODBOR, ST_ZAMERANIE, ROD_CISLO, ROCNIK, ST_SKUPINA, STAV, UKONCENIE, DAT_ZAPISU
+            from STUDENT
+                where ROD_CISLO ='845902/0012';
+update ZAP_PREDMETY
+    set OS_CISLO = 9
+        where OS_CISLO = 8;
+delete from STUDENT
+    where OS_CISLO = 8;
+
+create or replace trigger update_os1
+    before update of OS_CISLO on STUDENT
+    for each row
+begin
+    update ZAP_PREDMETY
+        set OS_CISLO = :new.OS_CISLO
+            where OS_CISLO = :old.OS_CISLO;
+end;
+/
+
+select *
+    from STUDENT;
+
+update STUDENT
+    set OS_CISLO = 9
+        where OS_CISLO = 8;
+
+--
