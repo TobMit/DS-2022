@@ -20,6 +20,7 @@ BEGIN
             where to_char(datum, 'DD/MM') = to_char(p_datum, 'DD/MM');
     RETURN NAVR_MENO;
 END;
+/
 
 ------------------ Volanie proceduri -----------------------------------
 select NAME_DAY(sysdate), to_char(sysdate, 'DD.MM')
