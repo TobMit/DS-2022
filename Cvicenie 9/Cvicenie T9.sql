@@ -222,3 +222,21 @@ update zap_predmety
 
 delete ZAP_PREDMETY
     where OS_CISLO = 8 and CIS_PREDM = 'BI30';
+
+-- 9.1.5
+
+create or replace trigger zakazanie_delete_v_zap_predmet
+    before delete on ZAP_PREDMETY
+    for each row
+    begin
+        raise_application_error(-20001, 'Pokusate sa zmazat hodnotu v predmete');
+    end;
+    /
+
+alter trigger zakazanie_delete_v_zap_predmet disable;
+
+insert into zap_predmety (os_cislo, cis_predm, skrok, prednasajuci, ects)
+    values (8, 'BI30', 2022, 'KI003', 5);
+delete ZAP_PREDMETY
+    where OS_CISLO = 8 and CIS_PREDM = 'BI30';
+rollback;
