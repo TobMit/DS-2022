@@ -34,6 +34,9 @@ create or replace trigger update_id_platitela
         select count(ROD_CISLO) into pocet_posoba
             from P_OSOBA where ROD_CISLO = :old.ID_PLATITELA;
 
+        insert into P_PLATITEL(ID_PLATITELA)
+            values (:new.ID_PLATITELA);
+
         if pocet_ztp > 0 then
         update P_ZTP set ROD_CISLO = :new.ID_PLATITELA
             where ROD_CISLO = :OLD.ID_PLATITELA;
@@ -63,6 +66,9 @@ create or replace trigger update_id_platitela
         update P_OSOBA set ROD_CISLO = :new.ID_PLATITELA
             where ROD_CISLO = :OLD.ID_PLATITELA;
         end if;
+
+        delete P_PLATITEL
+            where ID_PLATITELA = :new.ID_PLATITELA;
     end;
 /
 
