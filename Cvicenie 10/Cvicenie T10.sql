@@ -10,7 +10,7 @@ create or replace trigger poberatel
 
 alter trigger poberatel disable ;
 
--- DU ID UPDATE PLATITELA!!!!
+-- DU ID UPDATE PLATITELA!!!! --------------------------------------------------
 
 -- vytvorit pohlad zamestnancov spoločnosti ibm
 create or replace view IBM
@@ -18,5 +18,12 @@ create or replace view IBM
         from P_ZAMESTNANEC
             where ID_ZAMESTNAVATELA in (select ico
                                             from P_ZAMESTNAVATEL
-                                                where NAZOV = 'IBM');
+                                                where NAZOV = 'IBM')
+                with check option;
+-- check option dedí všetky podmienky aj keď je vnorený
+select * from IBM;
+
+insert into IBM values (12345678, '920801/6642', sysdate, null, 7);
+-- ak spravíme toto cez triger tak obídeme view aj keď je nastavený na read only.
+rollback;
 
