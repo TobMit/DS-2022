@@ -40,9 +40,18 @@ create or replace view pohlad_poberatel
 create or replace trigger t_viewer_osoba_poberatel
     instead of insert on pohlad_poberatel
     for each row
+    declare
+        pocet int;
     begin
+        select count(ROD_CISLO) into pocet
+            from P_OSOBA
+                where ROD_CISLO = :new.ROD_CISLO;
+        if pocet = 0 then
         insert into P_OSOBA
             values (:new.rod_cislo, :new.meno, :new.priezvisko, :new.psc, :new.ulica);
+        end if;
         insert into P_POBERATEL
             values (:new.id_poberatela, :new.rod_cislo, :new.id_typu, :new.perc_vyj, :new.dat_od, :new.dat_do);
     end;
+/
+
