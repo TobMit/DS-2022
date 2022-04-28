@@ -54,4 +54,5 @@ create or replace trigger t_viewer_osoba_poberatel
             values (:new.id_poberatela, :new.rod_cislo, :new.id_typu, :new.perc_vyj, :new.dat_od, :new.dat_do);
     end;
 /
+-- podobne sa dá riešiť aj platitel
 
