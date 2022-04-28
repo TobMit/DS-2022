@@ -27,3 +27,22 @@ insert into IBM values (12345678, '920801/6642', sysdate, null, 7);
 -- ak spravíme toto cez triger tak obídeme view aj keď je nastavený na read only.
 rollback;
 
+-- pohlad ktorý bude obsahovať osoby a poberateľov (* nad oboma tabuľkami)
+create or replace view pohlad_poberatel
+    as select *
+        from P_OSOBA join P_POBERATEL using (rod_cislo);
+/
+
+-- keď dám spojenie cez on tak to nebude fungovať, lebo môžu byť rovnaké názvi premenných, using je vhodnejšie
+-- nie je možné vložiť, lebo máme dve tabuľky spojené
+
+-- napísať triger ktorí toto spojenie pre insert rozbieje do dvoch tabuliek
+create or replace trigger t_viewer_osoba_poberatel
+    instead of insert on pohlad_poberatel
+    for each row
+    begin
+        insert into P_OSOBA
+            values (:new.rod_cislo, :new.meno, :new.priezvisko, :new.psc, :new.ulica);
+        insert into P_POBERATEL
+            values (:new.id_poberatela, :new.rod_cislo, :new.id_typu, :new.perc_vyj, :new.dat_od, :new.dat_do);
+    end;
