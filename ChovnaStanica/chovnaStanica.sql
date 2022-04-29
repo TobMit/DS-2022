@@ -19,7 +19,7 @@ CREATE TABLE pobocky
 );
 
 ALTER TABLE pobocky
-	ADD CONSTRAINT  XPKPoboèky PRIMARY KEY (id_pobocky);
+	ADD CONSTRAINT  XPKPoboï¿½ky PRIMARY KEY (id_pobocky);
 
 CREATE TABLE zakaznici_dodavatelia
 (
@@ -63,7 +63,7 @@ CREATE TABLE pobocky_zariadenia
 );
 
 ALTER TABLE pobocky_zariadenia
-	ADD CONSTRAINT  XPKPoboèky_Zoznam_vybavenia PRIMARY KEY (id_pobocky,id_zariadenia);
+	ADD CONSTRAINT  XPKPoboï¿½ky_Zoznam_vybavenia PRIMARY KEY (id_pobocky,id_zariadenia);
 
 CREATE TABLE zvierata
 (
@@ -80,10 +80,10 @@ CREATE TABLE zvierata
 ALTER TABLE zvierata
 	ADD CONSTRAINT  XPKZvierata PRIMARY KEY (id_zviera);
 
-CREATE TABLE Fin_Operacie
+CREATE TABLE fin_operacie
 (
-	id_osoby             INTEGER NOT NULL ,
-	id_transakcia        int NOT NULL ,
+    id_transakcia        int NOT NULL ,
+    id_osoby             INTEGER NOT NULL ,
 	datum                DATE NOT NULL ,
 	id_zviera            int NULL ,
 	cena                 NUMBER NOT NULL ,
@@ -92,7 +92,7 @@ CREATE TABLE Fin_Operacie
 	id_pobocky           int NOT NULL 
 );
 
-ALTER TABLE Fin_Operacie
+ALTER TABLE fin_operacie
 	ADD CONSTRAINT  XPKFin_operacie PRIMARY KEY (id_transakcia);
 
 ALTER TABLE zamestnanci
@@ -116,16 +116,16 @@ ALTER TABLE zvierata
 ALTER TABLE zvierata
 	ADD (CONSTRAINT plem_zv FOREIGN KEY (plemeno) REFERENCES plemena (id_plem));
 
-ALTER TABLE Fin_Operacie
+ALTER TABLE fin_operacie
 	ADD (CONSTRAINT id_zakaznika FOREIGN KEY (id_osoby) REFERENCES zakaznici_dodavatelia (id_osoby));
 
-ALTER TABLE Fin_Operacie
+ALTER TABLE fin_operacie
 	ADD (CONSTRAINT Id_pred_zv FOREIGN KEY (id_zviera) REFERENCES zvierata (id_zviera));
 
-ALTER TABLE Fin_Operacie
+ALTER TABLE fin_operacie
 	ADD (CONSTRAINT R_29 FOREIGN KEY (id_plem) REFERENCES plemena (id_plem));
 
-ALTER TABLE Fin_Operacie
+ALTER TABLE fin_operacie
 	ADD (CONSTRAINT R_30 FOREIGN KEY (id_pobocky) REFERENCES pobocky (id_pobocky));
 
 -- constrain pre zamestnancov opraveny koli tomu ze taky uz existuje

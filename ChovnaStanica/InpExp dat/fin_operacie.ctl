@@ -4,7 +4,7 @@ INTO TABLE Fin_Operacie
 
 FIELDS TERMINATED BY '|'
 (
-  id_predaja,
+  id_transakcia,
   id_osoby,
   datum DATE 'DD/MM/YYYY',
   id_zviera,
