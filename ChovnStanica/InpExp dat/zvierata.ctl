@@ -8,7 +8,7 @@ FIELDS TERMINATED BY '|'
   matka,
   otec,
   meno_zver,
-  datum_nar,
+  datum_nar DATE 'DD/MM/YYYY',
   pohlavie,
   id_pobocky,
   plemeno

@@ -6,7 +6,7 @@ FIELDS TERMINATED BY '|'
 (
   id_predaja,
   id_osoby,
-  datum,
+  datum DATE 'DD/MM/YYYY',
   id_zviera,
   cena,
   typ_operacie,
