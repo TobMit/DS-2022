@@ -11,3 +11,4 @@ FIELDS TERMINATED BY '|'
   priezvisko,
   prac_od DATE 'DD/MM/YYYY',
   prac_do DATE 'DD/MM/YYYY'
+  )
