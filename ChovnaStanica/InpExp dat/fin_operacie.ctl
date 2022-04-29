@@ -10,6 +10,6 @@ FIELDS TERMINATED BY '|'
   id_zviera,
   cena,
   typ_operacie,
-  id_prem,
+  id_plem,
   id_pobocky
 )
