@@ -39,7 +39,7 @@ CREATE TABLE zamestnanci
 	rod_cis              varchar2(11) NOT NULL ,
 	priezvisko           varchar2(15) NOT NULL ,
 	prac_od              DATE NOT NULL ,
-	prad_do              DATE NULL ,
+	prac_do              DATE NULL ,
 	id_pobocky           int NOT NULL 
 );
 
