@@ -1,23 +1,23 @@
 #include <iostream>
 #include <fstream>
 
+using namespace std;
 
 void spracujData(string sourceName);
 
-using namespace std;
 
 
 int main() {
     /// Treba vždy zo súboru odstraniť utf 8 bom - cez hex editor prvé tri byty
-    string sourceName[] = {"Fin_Operacie",
-                            "Plemena",
-                            "Pobocky",
-                            "Pobocky_zariadenia",
-                            "Zakaznici_dodavatelia",
-                            "Zamestnanci",
-                            "Zariadenia",
-                            "Zvierata"} ;
-    for (int i = 0; i < sourceName->size(); ++i) {
+    string sourceName[] = {"fin_operacie",
+                            "plemena",
+                            "pobocky",
+                            "pobocky_zariadenia",
+                            "zakaznici_dodavatelia",
+                            "zamestnanci",
+                            "zariadenia",
+                            "zvierata"} ;
+    for (int i = 0; i < 8; i++) {
         spracujData(sourceName[i]);
     }
 
@@ -28,8 +28,8 @@ void spracujData(string sourceName) {
     ofstream zapisovac;
     fstream citac;
 
-    citac.open("../Cvicenie 8/name_calendar.csv");
-    zapisovac.open("../Cvicenie 8/name_day_calendar.txt");
+    citac.open("../ChovnaStanica/InpExp dat/rawData/" + sourceName +".csv");
+    zapisovac.open("../ChovnaStanica/InpExp dat/rawData/" + sourceName + ".txt");
     string  nacitane;
     string delimiter = ";";
 
@@ -38,21 +38,27 @@ void spracujData(string sourceName) {
         // nacita iba jedno meno
 
         while (getline(citac,nacitane)) {
-            pos = nacitane.find(delimiter);
-            zapisovac << nacitane.substr(0, pos) << "|";
-            nacitane.erase(0, pos + delimiter.length());
+            //pos = nacitane.find(delimiter);
+            //zapisovac << nacitane.substr(0, pos) << "|";
+            //nacitane.erase(0, pos + delimiter.length());
 
             while ((pos = nacitane.find(delimiter)) != string::npos) {
-                zapisovac << nacitane.substr(0, pos);
+                zapisovac << nacitane.substr(0, pos) << "|";
                 nacitane.erase(0, pos + delimiter.length());
             }
+
+            pos = nacitane.find("\r");
+            zapisovac << nacitane.substr(0, pos) << "|" << endl;
+
+            //zapisovac << nacitane << "|" << endl;
+            /*
             if (nacitane.size() > 2) {
                 pos = nacitane.find("\r");
                 zapisovac << nacitane.substr(0, pos) << "|" << endl;
             } else
             {
                 zapisovac << "|" << endl;
-            }
+            }*/
 
         }
     }
