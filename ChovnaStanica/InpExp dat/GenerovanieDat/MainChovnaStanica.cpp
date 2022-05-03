@@ -57,12 +57,24 @@ void naplnPomocneTabulky() {
     if (loader->isOpen()) {
         naplnanieTabuliek(&ulice,loader);
     }
-/*
-    for (int i = 0; i < menaM.size(); i++) {
-        cout << menaM.at(i) << endl;
+    loader->openNew("../ChovnaStanica/InpExp dat/GenerovanieDat/sorceData/zariadenia.txt");
+    if (loader->isOpen()) {
+        naplnanieTabuliek(&zariadenia,loader);
+    }
+    loader->openNew("../ChovnaStanica/InpExp dat/GenerovanieDat/sorceData/zveryM.txt");
+    if (loader->isOpen()) {
+        naplnanieTabuliek(&zvieraMenoM,loader);
+    }
+    loader->openNew("../ChovnaStanica/InpExp dat/GenerovanieDat/sorceData/zveryZ.txt");
+    if (loader->isOpen()) {
+        naplnanieTabuliek(&zvieraMenoZ,loader);
+    }
+
+    /*
+    for (int i = 0; i < zariadenia.size(); i++) {
+        cout << zariadenia.at(i) << endl;
     }*/
 }
-
 
 void naplnanieTabuliek(vector<string> *vector, DataLoader *loader) {
     while (loader->nextLine()){
