@@ -220,11 +220,16 @@ void naplnPomocneTabulky();
 void naplnanieTabuliek(vector<string> *vector, DataLoader *loader);
 string& generujRodCislo(bool zena);
 void generujZariadenia();
+void generujPlemena();
+void generujZamestnancov(const int maxPocet);
 
 int main() {
     srand(time(NULL));
     naplnPomocneTabulky();
     generujZariadenia();
+    generujPlemena();
+
+
     for (const auto &item: tableZariadenia) {
         cout << item->id() << " " << item->nazovZariadenia() << endl;
     }
@@ -378,6 +383,17 @@ void generujZariadenia() {
         data->id() = to_string(index);
         data->nazovZariadenia() = item;
         tableZariadenia.push_back(data);
+        index++;
+    }
+}
+
+void generujPlemena() {
+    int index = 1;
+    for (const auto &item: plemen) {
+        auto *data = new plemena;
+        data->id() = to_string(index);
+        data->nazovPlemena() = item;
+        teblePlemena.push_back(data);
         index++;
     }
 }
