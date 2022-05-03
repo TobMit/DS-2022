@@ -224,6 +224,7 @@ void generujZariadenia();
 void generujPlemena();
 void generujPobocky(const int pocetPobociek);
 void generujZamestnancov(const int minPocet);
+void generujPobockyZariadenia();
 
 int main() {
     srand(time(NULL));
@@ -232,10 +233,14 @@ int main() {
     generujPlemena();
     generujPobocky(POCET_POBOCIEK);
     generujZamestnancov(POCET_ZAMESTNANCOV_NA_CHOVNU_STANICU);
+    generujPobockyZariadenia();
 
-    for (const auto &item: tableZamestnanci) {
-        cout << item->id() << " " << item->idPobocky() << " " << item->meno() << " " << item->priezvisko() << " " << item->rodCislo()<< " "  << item->pradOd()<< " "  << item->pradDo()<< endl;
+    for (const auto &item:  tablePobockyZariadenia) {
+        cout << item->idZariad() << " "<< item->idPobocky() << endl;
     }
+    /*for (const auto &item: tableZamestnanci) {
+        cout << item->id() << " " << item->idPobocky() << " " << item->meno() << " " << item->priezvisko() << " " << item->rodCislo()<< " "  << item->pradOd()<< " "  << item->pradDo()<< endl;
+    }*/
 
     return 0;
 }
@@ -544,5 +549,14 @@ void generujZamestnancov(const int minPocet) {
             tableZamestnanci.at(index - 2)->pradOd() = datum;
             tableZamestnanci.at(index - 2)->pradDo() = datum2;
         }
+    }
+}
+
+void generujPobockyZariadenia() {
+    for (int i = 0; i < tablePobocky.size(); ++i) {
+        auto *data = new pobocky_zariadenia;
+        data->idPobocky() = to_string(i + 1);
+        data->idZariad() = tableZariadenia.at(rand() % tableZariadenia.size())->id();
+        tablePobockyZariadenia.push_back(data);
     }
 }
