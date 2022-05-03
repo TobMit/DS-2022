@@ -1,0 +1,13 @@
+stajna
+hala
+vybeh
+budova 
+budova_bazen
+vybeh_bazen
+terarium
+stajna_hala
+stajna_vybeh
+hala_vybeh
+hala_stajna
+stajna_hala_vybeh
+
