@@ -19,9 +19,6 @@ Albi
 Aldo
 Aleko
 Ale
-Aleio
-Alf
-Ali
 Alik
 Alvin
 Aman
@@ -38,7 +35,6 @@ Amos
 Anor
 Anry
 Apollo
-Ar
 Aran
 Arci
 Ardo
@@ -97,7 +93,6 @@ Baryk
 Basir
 Basko
 Bastien
-Ba
 Baen
 Bazi
 Bazir
@@ -187,7 +182,6 @@ Dar
 Daro
 Daryk
 Dasty
-Da
 Dai
 Dee
 Delon
@@ -239,7 +233,6 @@ Fleky
 Fletcher
 Flo
 Fogy
-Fo
 Frankie
 Fred
 Fredy
@@ -277,7 +270,6 @@ Hektor
 Hep
 Hero
 Hery
-He
 Hirko
 Holmes
 Honey
@@ -348,7 +340,6 @@ Leon
 Leonardo
 Lesan
 Lesy
-Le
 Lojza
 Lord
 Lucky
@@ -359,7 +350,6 @@ Marko
 Marley
 Mates
 Matteo
-Ma
 Maim
 Mici
 Mik
@@ -426,8 +416,6 @@ Rek
 Remus
 Rene
 Reny
-Re
-
 Ricky
 Richard
 Rick
@@ -464,7 +452,6 @@ Sandy
 Sang
 Sano
 Sasa
-Sa
 Saymon
 Scooby
 Sebi
