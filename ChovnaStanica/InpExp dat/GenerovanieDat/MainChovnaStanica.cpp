@@ -9,7 +9,8 @@ using namespace std;
 vector<string> menaM, menaZ, ulice, priezviskaM, priezviskaZ;
 vector<array<string,2>> mesta;
 
-void spracujData(string sourceName);
+void spracujData();
+void ulozData(string sourceName);
 void naplnPomocneTabulky();
 
 void naplnanieTabuliek(vector<string> *vector, DataLoader *loader);
@@ -18,25 +19,6 @@ int main() {
     static const int POCET_ZAZNAMOV = 100000;
     naplnPomocneTabulky();
 
-
-
-
-
-
-    /// Treba vždy zo súboru odstraniť utf 8 bom - cez hex editor prvé tri byty
-    /*
-    string sourceName[] = {"fin_operacie",
-                            "plemena",
-                            "pobocky",
-                            "pobocky_zariadenia",
-                            "zakaznici_dodavatelia",
-                            "zamestnanci",
-                            "zariadenia",
-                            "zvierata"} ;
-    for (int i = 0; i < 8; i++) {
-        spracujData(sourceName[i]);
-    }
-*/
     return 0;
 }
 
@@ -82,7 +64,22 @@ void naplnanieTabuliek(vector<string> *vector, DataLoader *loader) {
     }
 }
 
-void spracujData(string sourceName) {
+void spracujData() {
+    /// Treba vždy zo súboru odstraniť utf 8 bom - cez hex editor prvé tri byty
+    string sourceName[] = {"fin_operacie",
+                           "plemena",
+                           "pobocky",
+                           "pobocky_zariadenia",
+                           "zakaznici_dodavatelia",
+                           "zamestnanci",
+                           "zariadenia",
+                           "zvierata"} ;
+    for (int i = 0; i < 8; i++) {
+        ulozData(sourceName[i]);
+    }
+}
+
+void ulozData(string sourceName) {
     ofstream zapisovac;
     fstream citac;
 
@@ -107,16 +104,6 @@ void spracujData(string sourceName) {
 
             pos = nacitane.find("\r");
             zapisovac << nacitane.substr(0, pos) << "|" << endl;
-
-            //zapisovac << nacitane << "|" << endl;
-            /*
-            if (nacitane.size() > 2) {
-                pos = nacitane.find("\r");
-                zapisovac << nacitane.substr(0, pos) << "|" << endl;
-            } else
-            {
-                zapisovac << "|" << endl;
-            }*/
 
         }
     }
