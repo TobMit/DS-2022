@@ -202,7 +202,7 @@ vector<zariadenia*> tableZariadenia;
 vector<pobocky_zariadenia*> tablePobockyZariadenia;
 vector<pobocky*> tablePobocky;
 vector<zamestnanci*> tableZamestnanci;
-vector<plemena*> teblePlemena;
+vector<plemena*> tablePlemena;
 vector<zvierata*> tableZvierata;
 vector<finOperacie*> tableFinOperacie;
 vector<zakazniciDodavatelia*> tableZakazniciDodavatelia;
@@ -220,12 +220,14 @@ void ulozData(string sourceName);
 void naplnPomocneTabulky();
 void naplnanieTabuliek(vector<string> *vector, DataLoader *loader);
 string& generujRodCislo(bool zena);
+string& generujDatum();
 void generujZariadenia();
 void generujPlemena();
 void generujPobocky(const int pocetPobociek);
 void generujZamestnancov(const int minPocet);
 void generujPobockyZariadenia();
 void generujZakazniciDodavatelia(const int ZAKAZNICI_DODAVATELIA);
+void generujZviera(const int minPoc);
 
 int main() {
     srand(time(NULL));
@@ -236,13 +238,14 @@ int main() {
     generujZamestnancov(POCET_ZAMESTNANCOV_NA_CHOVNU_STANICU);
     generujPobockyZariadenia();
     generujZakazniciDodavatelia(ZAKAZNICI_DODAVATELIA);
+    generujZviera(POCET_ZAZNAMOV_ZVEROV);
 
-    for (const auto &item:  tableZakazniciDodavatelia) {
-        cout << item->id()<< " "<< item->meno() << " " << item->priezvisko() << " " << item->spolocnost() << endl;
-    }
-    /*for (const auto &item: tableZamestnanci) {
-        cout << item->id() << " " << item->idPobocky() << " " << item->meno() << " " << item->priezvisko() << " " << item->rodCislo()<< " "  << item->pradOd()<< " "  << item->pradDo()<< endl;
+    /*for (const auto &item:  tablePlemena) {
+        cout << item->id()<< " "<< item->nazovPlemena()  << endl;
     }*/
+    for (const auto &item: tableZvierata) {
+        cout << item->id() << " " << item->matka() << " " << item->otec() << " " << item->menoZvierata() << " " << item->datumNarodenia()<< " "  << item->pohlavie()<< " "  << item->idPobocky()<< " "<< item->pelemeno()<< endl;
+    }
 
     return 0;
 }
@@ -394,6 +397,27 @@ string &generujRodCislo(bool zena) {
     return returnValue;
 }
 
+string &generujDatum(){
+    int den = rand() % 27 + 1;
+    int mesiac = rand() % 12 + 1;
+    int rok = rand() % 11 + ZACIATOK_PODNIKANIA;
+    stringstream builder;
+    if (den < 10) {
+        builder << "0"<<to_string(den);
+    } else {
+        builder << to_string(den);
+    }
+    builder << ".";
+    if (mesiac < 10) {
+        builder << "0"<<to_string(mesiac);
+    } else {
+        builder << to_string(mesiac);
+    }
+    builder << "." << to_string(rok);
+    string datum = builder.str();
+    return datum;
+}
+
 void generujZariadenia() {
     int index = 1;
     for (const auto &item: zariadeniaInport) {
@@ -411,7 +435,7 @@ void generujPlemena() {
         auto *data = new plemena;
         data->id() = to_string(index);
         data->nazovPlemena() = item;
-        teblePlemena.push_back(data);
+        tablePlemena.push_back(data);
         index++;
     }
 }
@@ -588,5 +612,100 @@ void generujZakazniciDodavatelia(const int ZAKAZNICI_DODAVATELIA) {
             data->spolocnost() = firmi.at(rand() % firmi.size());
         }
         tableZakazniciDodavatelia.push_back(data);
+    }
+}
+
+void generujZviera(const int minPoc) {
+    // tu sa budú ukldat indexi takých zvierat ktoré sú vhodnými kandidátmi byť rodičmi
+    // datum narodenia majú null - nemusím riešiť rok narodenia
+    vector<int> matka;
+    vector<int> otec;
+    //kolko volnych miest toľko krát sa index (nie ten ktorý sa getuje ale ten ktorý sa nachádza vo vektore) pobocky nachadza v tomto zozname
+    vector<int>volnePobocky;
+    for (int i = 0; i < tablePobocky.size(); ++i) {
+        for (int j = 0; j < stoi(tablePobocky.at(i)->kapacita()); ++j) {
+            volnePobocky.push_back(i);
+        }
+    }
+    
+    int index = 1;
+    int deti = minPoc/3;
+    int hlavneZaznami = minPoc - deti;
+    zvierata *data;
+    for (int i = 0; i < hlavneZaznami; ++i) {
+        data = new zvierata;
+        bool zena = false;
+        if (rand() % 2 == 1) {
+            zena = true;
+        }
+        data->id() = to_string(index);
+        data->matka() = "";
+        data->otec() = "";
+        
+        if (rand() % 4 == 1) {
+            data->datumNarodenia() = "";
+            if (zena) {
+                matka.push_back(i);
+            } else {
+                otec.push_back(i);
+            }
+        } else {
+            data->datumNarodenia() = generujDatum();
+        }
+
+        if (zena) {
+            data->menoZvierata() = zvieraMenoZ.at(rand() % zvieraMenoZ.size());
+            data->pohlavie() = "Z";
+        } else {
+            data->menoZvierata() = zvieraMenoM.at(rand() % zvieraMenoM.size());
+            data->pohlavie() = "M";
+        }
+        int volnyIndex = rand() % volnePobocky.size();
+        data->idPobocky() = tablePobocky.at(volnePobocky.at(volnyIndex))->id();
+        volnePobocky.erase(volnePobocky.begin() + volnyIndex);
+
+        data->pelemeno() = plemen.at(rand() % plemen.size());
+        index++;
+
+        tableZvierata.push_back(data);
+    }
+    for (int i = 0; i < deti; ++i) {
+        if (volnePobocky.empty()){
+            break;
+        }
+        data = new zvierata;
+        bool zena = false;
+        if (rand() % 2 == 1) {
+            zena = true;
+        }
+        data->id() = to_string(index);
+        data->matka() = tableZvierata.at(matka.at(rand() % matka.size()))->id();
+        data->otec() = tableZvierata.at(otec.at(rand() % otec.size()))->id();
+
+        if (rand() % 4 == 1) {
+            data->datumNarodenia() = "";
+            if (zena) {
+                matka.push_back(i);
+            } else {
+                otec.push_back(i);
+            }
+        } else {
+            data->datumNarodenia() = generujDatum();
+        }
+
+        if (zena) {
+            data->menoZvierata() = zvieraMenoZ.at(rand() % zvieraMenoZ.size());
+            data->pohlavie() = "Z";
+        } else {
+            data->menoZvierata() = zvieraMenoM.at(rand() % zvieraMenoM.size());
+            data->pohlavie() = "M";
+        }
+        int volnyIndex = rand() % volnePobocky.size();
+        data->idPobocky() = tablePobocky.at(volnePobocky.at(volnyIndex))->id();
+        volnePobocky.erase(volnePobocky.begin() + volnyIndex);
+
+        data->pelemeno() = plemen.at(rand() % plemen.size());
+        index++;
+        tableZvierata.push_back(data);
     }
 }
