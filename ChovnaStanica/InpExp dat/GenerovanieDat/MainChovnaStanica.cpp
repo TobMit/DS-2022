@@ -7,10 +7,25 @@
 
 using namespace std;
 
-vector<string> menaM, menaZ, ulice, priezviskaM, priezviskaZ, zariadenia, zvieraMenoM, zvieraMenoZ;
+class zariadenia;
+class pobocky_zariadenia;
+class pobocky;
+class zamestnanci;
+class plemena;
+class zvierata;
+class finOperacie;
+class zakazniciDodavatelia;
+
+vector<string> menaM, menaZ, ulice, priezviskaM, priezviskaZ, zariadeniaInport, zvieraMenoM, zvieraMenoZ;
 vector<array<string,2>> mesta;
-
-
+vector<zariadenia*> tableZariadenia;
+vector<pobocky_zariadenia*> tablePobockyZariadenia;
+vector<pobocky*> tablePobocky;
+vector<zamestnanci*> tableZamestnanci;
+vector<plemena*> teblePlemena;
+vector<zvierata*> tableZvierata;
+vector<finOperacie*> tableFinOperacie;
+vector<zakazniciDodavatelia*> zakazniciDodavatelia;
 
 void spracujData();
 void ulozData(string sourceName);
@@ -18,10 +33,15 @@ void naplnPomocneTabulky();
 void naplnanieTabuliek(vector<string> *vector, DataLoader *loader);
 string& generujRodCislo(bool zena);
 
+
 int main() {
     srand(time(NULL));
-    static const int POCET_ZAZNAMOV = 100000;
+    static const int POCET_ZAZNAMOV_ZVEROV = 1000;
+    static const int POCET_POBOCIEK = POCET_ZAZNAMOV_ZVEROV/10;
+    static const int POCET_ZAMESTNANCOV = POCET_POBOCIEK * 4;
+    static const int POCET_FIN_OPERACI = POCET_ZAZNAMOV_ZVEROV;
     naplnPomocneTabulky();
+
 
     return 0;
 }
@@ -59,7 +79,7 @@ void naplnPomocneTabulky() {
     }
     loader->openNew("../ChovnaStanica/InpExp dat/GenerovanieDat/sorceData/zariadenia.txt");
     if (loader->isOpen()) {
-        naplnanieTabuliek(&zariadenia,loader);
+        naplnanieTabuliek(&zariadeniaInport,loader);
     }
     loader->openNew("../ChovnaStanica/InpExp dat/GenerovanieDat/sorceData/zveryM.txt");
     if (loader->isOpen()) {
@@ -172,6 +192,8 @@ private:
     string idZariadenia;
     string nazovZariad;
 public:
+    zariadenia(){
+    };
     string& id() {
         return idZariadenia;
     };
