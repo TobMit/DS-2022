@@ -3,6 +3,7 @@
 #include "dataLoader/dataLoader.h"
 #include <vector>
 #include <array>
+#include <sstream>
 
 using namespace std;
 
@@ -15,10 +16,10 @@ void spracujData();
 void ulozData(string sourceName);
 void naplnPomocneTabulky();
 void naplnanieTabuliek(vector<string> *vector, DataLoader *loader);
-
-
+string& generujRodCislo(bool zena);
 
 int main() {
+    srand(time(NULL));
     static const int POCET_ZAZNAMOV = 100000;
     naplnPomocneTabulky();
 
@@ -61,6 +62,7 @@ void naplnPomocneTabulky() {
         cout << menaM.at(i) << endl;
     }*/
 }
+
 
 void naplnanieTabuliek(vector<string> *vector, DataLoader *loader) {
     while (loader->nextLine()){
@@ -113,6 +115,43 @@ void ulozData(string sourceName) {
     }
     zapisovac.close();
     citac.close();
+}
+
+string &generujRodCislo(bool zena) {
+    stringstream stringBuilder;
+    int rok = rand() % 50 + 55;
+    rok %= 100;
+    int mesiac = rand() % 12 + 1;
+    if (zena) {
+        mesiac += 50;
+    }
+    int den = rand() % 28 + 1;
+    int posledneTrojcislie = rand() % 899 + 100;
+    unsigned posledneCislo = ((10000000*rok) + (100000 * mesiac) + (1000 * den) + posledneTrojcislie) % 11;
+    if (posledneCislo > 9) {
+        return generujRodCislo(zena);
+    }
+
+    if (rok < 10) {
+        stringBuilder << "0" << to_string(rok);
+    } else {
+        stringBuilder << to_string(rok);
+    }
+    if (mesiac < 10){
+        stringBuilder << "0" << to_string(mesiac);
+    } else {
+        stringBuilder << to_string(mesiac);
+    }
+    if (den < 10){
+        stringBuilder << "0" << to_string(den) << "/";
+    } else {
+        stringBuilder << to_string(den) << "/";
+    }
+    stringBuilder << to_string(posledneTrojcislie) << to_string(posledneCislo);
+
+
+    string returnValue = stringBuilder.str();
+    return returnValue;
 }
 
 
