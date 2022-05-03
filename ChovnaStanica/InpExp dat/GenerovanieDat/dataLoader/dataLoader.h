@@ -10,9 +10,9 @@ using namespace std;
 
 class DataLoader {
 private:
-    wfstream citac;
-    wstring delimiter = L";";
-    wstring nacitane;
+    fstream citac;
+    string delimiter = " ";
+    string nacitane;
     size_t pos = 0;
 
 public:
@@ -30,7 +30,7 @@ public:
         citac.close();
     };
 
-    wstring getNextParameter();
+    string getNextParameter();
     bool nextLine();
 
     ~DataLoader(){
