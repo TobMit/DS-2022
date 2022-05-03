@@ -59,3 +59,12 @@ select *
 update ZVIERATA
     set ID_POBOCKY = ID_POBOCKY;
 rollback ;
+
+drop table fin_operacie;
+drop table zakaznici_dodavatelia;
+drop table zamestnanci;
+drop table pobocky_zariadenia;
+drop table zariadenia;
+drop table zvierata;
+drop table pobocky;
+drop table plemena;

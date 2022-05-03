@@ -207,7 +207,7 @@ vector<zvierata*> tableZvierata;
 vector<finOperacie*> tableFinOperacie;
 vector<zakazniciDodavatelia*> tableZakazniciDodavatelia;
 
-static const int POCET_ZAZNAMOV_ZVEROV = 1000;
+static const int POCET_ZAZNAMOV_ZVEROV = 10000;
 static const int KPACITA = 65;
 static const int POCET_POBOCIEK = POCET_ZAZNAMOV_ZVEROV / KPACITA;
 static const int POCET_ZAMESTNANCOV_NA_CHOVNU_STANICU = 6;
