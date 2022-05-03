@@ -1,6 +1,12 @@
 1|stajna|
 2|hala|
 3|vybeh|
-4|stajna + hala|
-5|hala + vybeh|
-6|vybeh + stajna|
+4|budova|
+5|budova_bazen|
+6|vybeh_bazen|
+7|terarium|
+8|stajna_hala|
+9|stajna_vybeh|
+10|hala_vybeh|
+11|hala_stajna|
+12|stajna_hala_vybeh|
