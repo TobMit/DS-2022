@@ -221,17 +221,19 @@ void naplnanieTabuliek(vector<string> *vector, DataLoader *loader);
 string& generujRodCislo(bool zena);
 void generujZariadenia();
 void generujPlemena();
-void generujZamestnancov(const int maxPocet);
+void generujPobocky(const int pocetPobociek);
+void generujZamestnancov(const int minPocet);
 
 int main() {
     srand(time(NULL));
     naplnPomocneTabulky();
     generujZariadenia();
     generujPlemena();
+    generujPobocky(POCET_POBOCIEK);
+    generujZamestnancov(POCET_ZAZNAMOV_ZVEROV);
 
-
-    for (const auto &item: tableZariadenia) {
-        cout << item->id() << " " << item->nazovZariadenia() << endl;
+    for (const auto &item: tablePobocky) {
+        cout << item->id() << " " << item->kapacita() << " " << item->psc() << " " << item->adresa() << " " << item->mesto() << endl;
     }
 
     return 0;
@@ -395,5 +397,27 @@ void generujPlemena() {
         data->nazovPlemena() = item;
         teblePlemena.push_back(data);
         index++;
+    }
+}
+void generujPobocky(const int pocetPobociek) {
+    for (int i = 1; i <= pocetPobociek; ++i) {
+        auto *data = new pobocky;
+        data->id() = to_string(i);
+        int randomKapacita = rand() % 50 - 25;
+        data->kapacita() = to_string(KPACITA + randomKapacita);
+        int indexMesto = rand() % mesta.size();
+        int indexUlica = rand() % ulice.size();
+        data->psc() = mesta.at(indexMesto).at(1);
+        data->mesto() = mesta.at(indexMesto).at(0);
+        data->adresa() = ulice.at(indexUlica);
+        tablePobocky.push_back(data);
+    }
+
+}
+void generujZamestnancov(const int minPocet) {
+    int index = 1;
+    bool zena =false;
+    if (rand() % 2 == 1) {
+        zena = true;
     }
 }
