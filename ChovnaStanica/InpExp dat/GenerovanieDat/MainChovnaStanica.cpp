@@ -713,7 +713,7 @@ void generujZviera(const int minPoc) {
 
         if (zena) {
             data->menoZvierata() = zvieraMenoZ.at(rand() % zvieraMenoZ.size());
-            data->pohlavie() = "Z";
+            data->pohlavie() = "F";
         } else {
             data->menoZvierata() = zvieraMenoM.at(rand() % zvieraMenoM.size());
             data->pohlavie() = "M";
