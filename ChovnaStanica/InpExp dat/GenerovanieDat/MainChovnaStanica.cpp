@@ -210,9 +210,10 @@ vector<zakazniciDodavatelia*> tableZakazniciDodavatelia;
 static const int POCET_ZAZNAMOV_ZVEROV = 1000;
 static const int KPACITA = 65;
 static const int POCET_POBOCIEK = POCET_ZAZNAMOV_ZVEROV / KPACITA;
-static const int POCET_ZAMESTNANCOV = POCET_POBOCIEK * 6;
+static const int POCET_ZAMESTNANCOV_NA_CHOVNU_STANICU = 6;
 static const int POCET_FIN_OPERACI = POCET_ZAZNAMOV_ZVEROV;
 static const int ZAKAZNICI_DODAVATELIA = POCET_FIN_OPERACI / 100;
+static const int ZACIATOK_PODNIKANIA = 2010;
 
 void spracujData();
 void ulozData(string sourceName);
@@ -230,10 +231,10 @@ int main() {
     generujZariadenia();
     generujPlemena();
     generujPobocky(POCET_POBOCIEK);
-    generujZamestnancov(POCET_ZAZNAMOV_ZVEROV);
+    generujZamestnancov(POCET_ZAMESTNANCOV_NA_CHOVNU_STANICU);
 
-    for (const auto &item: tablePobocky) {
-        cout << item->id() << " " << item->kapacita() << " " << item->psc() << " " << item->adresa() << " " << item->mesto() << endl;
+    for (const auto &item: tableZamestnanci) {
+        cout << item->id() << " " << item->idPobocky() << " " << item->meno() << " " << item->priezvisko() << " " << item->rodCislo()<< " "  << item->pradOd()<< " "  << item->pradDo()<< endl;
     }
 
     return 0;
@@ -261,7 +262,7 @@ void naplnPomocneTabulky() {
     if (loader->isOpen()) {
         naplnanieTabuliek(&priezviskaM,loader);
     }
-    loader->openNew("../ChovnaStanica/InpExp dat/GenerovanieDat/sorceData/priezviksa_zien.txt");
+    loader->openNew("../ChovnaStanica/InpExp dat/GenerovanieDat/sorceData/priezviska_zien.txt");
     if (loader->isOpen()) {
         naplnanieTabuliek(&priezviskaZ,loader);
     }
@@ -282,9 +283,9 @@ void naplnPomocneTabulky() {
         naplnanieTabuliek(&zvieraMenoZ,loader);
     }
 
-    /*
-    for (int i = 0; i < zariadenia.size(); i++) {
-        cout << zariadenia.at(i) << endl;
+/*
+    for (int i = 0; i < menaZ.size(); i++) {
+        cout << menaZ.at(i) << endl;
     }*/
 }
 
@@ -399,6 +400,7 @@ void generujPlemena() {
         index++;
     }
 }
+
 void generujPobocky(const int pocetPobociek) {
     for (int i = 1; i <= pocetPobociek; ++i) {
         auto *data = new pobocky;
@@ -414,10 +416,133 @@ void generujPobocky(const int pocetPobociek) {
     }
 
 }
+
 void generujZamestnancov(const int minPocet) {
     int index = 1;
-    bool zena =false;
-    if (rand() % 2 == 1) {
-        zena = true;
+    bool zena = false;
+    zamestnanci *data;
+    for (int i = 0; i < tablePobocky.size(); ++i) {
+        for (int j = 0; j <= minPocet; ++j) {
+            if (rand() % 2 == 1) {
+                zena = true;
+            }
+            data = new zamestnanci;
+            data->id() = to_string(index);
+            index++;
+            data->idPobocky() = to_string(i + 1);
+            if (zena) {
+                data->meno() = menaZ.at(rand() % menaZ.size());
+                data->priezvisko() = priezviskaZ.at(rand() % priezviskaZ.size());
+            } else {
+                data->meno() = menaM.at(rand() % menaM.size());
+                data->priezvisko() = priezviskaM.at(rand() % priezviskaM.size());
+            }
+            data->rodCislo() = generujRodCislo(zena);
+            data->pradDo() = "";
+
+            int den = rand() % 27 + 1;
+            int mesiac = rand() % 12 + 1;
+            int rok = rand() % 11 + ZACIATOK_PODNIKANIA;
+            stringstream builder;
+            if (den < 10) {
+                builder << "0"<<to_string(den);
+            } else {
+                builder << to_string(den);
+            }
+            builder << ".";
+            if (mesiac < 10) {
+                builder << "0"<<to_string(mesiac);
+            } else {
+                builder << to_string(mesiac);
+            }
+            builder << "." << to_string(rok);
+            string datum = builder.str();
+            data->pradOd() = datum;
+
+            tableZamestnanci.push_back(data);
+        }
+        if (rand()%3 == 1) {
+            //prestupuje niekde
+            // zoberiemsi zamestnanca ktorého vygenerovalo ako posledného
+            // spravym z neho končiaceho
+            // potom s novým id priradim nahodnej pobočke
+            int den = rand() % 27 + 1;
+            int mesiac = rand() % 12 + 1;
+            int rok = rand() % 7 + ZACIATOK_PODNIKANIA;
+            stringstream builder;
+            stringstream builderKoniec;
+            stringstream novyZaciatok;
+            if (den < 10) {
+                builder << "0"<<to_string(den);
+                builderKoniec << "0"<<to_string(den);
+                novyZaciatok << "0"<<to_string(den);
+            } else {
+                builder << to_string(den);
+                builderKoniec << to_string(den);
+                novyZaciatok << to_string(den);
+            }
+            builder << ".";
+            builderKoniec << ".";
+            novyZaciatok << ".";
+            if (mesiac < 10) {
+                builder << "0"<<to_string(mesiac);
+                builderKoniec << "0"<<to_string(mesiac);
+                novyZaciatok << "0"<<to_string(mesiac);
+            } else {
+                builder << to_string(mesiac);
+                builderKoniec << to_string(mesiac);
+                novyZaciatok << to_string(mesiac);
+            }
+            builder << "." << to_string(rok);
+            builderKoniec << "." << to_string(rok + 2);
+            novyZaciatok << "." << to_string(rok + 3);
+            string datum = builder.str();
+            string datum2 = builderKoniec.str();
+            string datum3 = novyZaciatok.str();
+            tableZamestnanci.at(index - 2)->pradOd() = datum;
+            tableZamestnanci.at(index - 2)->pradDo() = datum2;
+            zamestnanci *novy = new zamestnanci;
+            novy->id() = to_string(index);
+            novy->meno() = tableZamestnanci.at(index - 2)->meno();
+            novy->priezvisko() = tableZamestnanci.at(index - 2)->priezvisko();
+            novy->idPobocky() = to_string(rand() % tablePobocky.size() + 1);
+            novy->rodCislo() = tableZamestnanci.at(index - 2)->rodCislo();
+            novy->pradDo() = "";
+            novy->pradOd() = datum3;
+            index++;
+            tableZamestnanci.push_back(novy);
+
+        } else {
+            //konci na pobocke
+            // zoberiemsi zamestnanca ktorého vygenerovalo ako posledného
+            // a tomu zmením datumi tak aby to pasovalo k tomu že skončil.
+            int den = rand() % 27 + 1;
+            int mesiac = rand() % 12 + 1;
+            int rok = rand() % 8 + ZACIATOK_PODNIKANIA;
+            stringstream builder;
+            stringstream builderKoniec;
+            if (den < 10) {
+                builder << "0"<<to_string(den);
+                builderKoniec << "0"<<to_string(den);
+            } else {
+                builder << to_string(den);
+                builderKoniec << to_string(den);
+            }
+            builder << ".";
+            builderKoniec << ".";
+            if (mesiac < 10) {
+                builder << "0"<<to_string(mesiac);
+                builderKoniec << "0"<<to_string(mesiac);
+            } else {
+                builder << to_string(mesiac);
+                builderKoniec << to_string(mesiac);
+            }
+            builder << "." << to_string(rok);
+            builderKoniec << "." << to_string(rok + 2);
+            string datum = builder.str();
+            string datum2 = builderKoniec.str();
+            tableZamestnanci.at(index - 2)->pradOd() = datum;
+            tableZamestnanci.at(index - 2)->pradDo() = datum2;
+        }
     }
 }
