@@ -7,17 +7,197 @@
 
 using namespace std;
 
-class zariadenia;
-class pobocky_zariadenia;
-class pobocky;
-class zamestnanci;
-class plemena;
-class zvierata;
-class finOperacie;
-class zakazniciDodavatelia;
+class zariadenia {
+private:
+    string idZariadenia;
+    string nazovZariad;
+public:
+    string& id() {
+        return idZariadenia;
+    };
+    string& nazovZariadenia(){
+        return nazovZariad;
+    };
+};
+class pobocky_zariadenia{
+private:
+    string idPoboc;
+    string idZar;
+public:
+    string& idPobocky() {
+        return idPoboc;
+    };
+    string& idZariad(){
+        return idZar;
+    };
+};
+class pobocky {
+private:
+    string idPoboc;
+    string kapac;
+    string pscA;
+    string adresaA;
+    string mestoA;
+public:
+    string& id() {
+        return idPoboc;
+    };
+    string& kapacita(){
+        return kapac;
+    };
+    string& psc(){
+        return pscA;
+    };
+    string& adresa(){
+        return adresaA;
+    };
+    string& mesto(){
+        return mestoA;
+    };
 
-vector<string> menaM, menaZ, ulice, priezviskaM, priezviskaZ, zariadeniaInport, zvieraMenoM, zvieraMenoZ;
+};
+class zamestnanci {
+private:
+    string cisloZam;
+    string pobocka;
+    string rodCisl;
+    string menO;
+    string priezv;
+    string prac_od;
+    string prac_do;
+public:
+    string& id() {
+        return cisloZam;
+    };
+    string& idPobocky(){
+        return pobocka;
+    };
+    string& meno(){
+        return menO;
+    };
+    string& priezvisko(){
+        return priezv;
+    };
+    string& rodCislo(){
+        return rodCisl;
+    };
+    string& pradOd(){
+        return prac_od;
+    };
+    string& pradDo(){
+        return prac_do;
+    };
+};
+class plemena {
+private:
+    string idPlem;
+    string nazovPlem;
+public:
+    string& id() {
+        return idPlem;
+    };
+    string& nazovPlemena(){
+        return nazovPlem;
+    };
+};
+class zvierata {
+private:
+    string idZviera;
+    string otc;
+    string matk;
+    string menoZver;
+    string datumNar;
+    string pohlav;
+    string idPoboc;
+    string plem;
+public:
+    string& id() {
+        return idZviera;
+    };
+    string& otec(){
+        return otc;
+    };
+    string& matka(){
+        return matk;
+    };
+    string& menoZvierata(){
+        return menoZver;
+    };
+    string& datumNarodenia(){
+        return datumNar;
+    };
+    string& pohlavie(){
+        return pohlav;
+    };
+    string& idPobocky(){
+        return idPoboc;
+    };
+    string& pelemeno(){
+        return plem;
+    };
+
+};
+class finOperacie {
+private:
+    string idTran;
+    string idOs;
+    string datu;
+    string idZver;
+    string cen;
+    string typ;
+    string idPlem;
+    string idPoboc;
+public:
+    string& id() {
+        return idTran;
+    };
+    string& idOsoby(){
+        return idOs;
+    };
+    string& datum(){
+        return datu;
+    };
+    string& idZvierata(){
+        return idZver;
+    };
+    string& cena(){
+        return cen;
+    };
+    string& typOperacie(){
+        return typ;
+    };
+    string& idPlemena(){
+        return idPlem;
+    };
+    string& idPobocky(){
+        return idPoboc;
+    };
+
+};
+class zakazniciDodavatelia {
+private:
+    string idOsoby;
+    string menO;
+    string priezv;
+    string spoloc;
+public:
+    string& id() {
+        return idOsoby;
+    };
+    string& meno(){
+        return menO;
+    };
+    string& priezvisko(){
+        return priezv;
+    };
+    string& spolocnost(){
+        return spoloc;
+    };
+};
+
+vector<string> menaM, menaZ, ulice, priezviskaM, priezviskaZ, zariadeniaInport, zvieraMenoM, zvieraMenoZ, plemen;
 vector<array<string,2>> mesta;
+
 vector<zariadenia*> tableZariadenia;
 vector<pobocky_zariadenia*> tablePobockyZariadenia;
 vector<pobocky*> tablePobocky;
@@ -25,27 +205,32 @@ vector<zamestnanci*> tableZamestnanci;
 vector<plemena*> teblePlemena;
 vector<zvierata*> tableZvierata;
 vector<finOperacie*> tableFinOperacie;
-vector<zakazniciDodavatelia*> zakazniciDodavatelia;
+vector<zakazniciDodavatelia*> tableZakazniciDodavatelia;
+
+static const int POCET_ZAZNAMOV_ZVEROV = 1000;
+static const int KPACITA = 65;
+static const int POCET_POBOCIEK = POCET_ZAZNAMOV_ZVEROV / KPACITA;
+static const int POCET_ZAMESTNANCOV = POCET_POBOCIEK * 6;
+static const int POCET_FIN_OPERACI = POCET_ZAZNAMOV_ZVEROV;
+static const int ZAKAZNICI_DODAVATELIA = POCET_FIN_OPERACI / 100;
 
 void spracujData();
 void ulozData(string sourceName);
 void naplnPomocneTabulky();
 void naplnanieTabuliek(vector<string> *vector, DataLoader *loader);
 string& generujRodCislo(bool zena);
-
+void generujZariadenia();
 
 int main() {
     srand(time(NULL));
-    static const int POCET_ZAZNAMOV_ZVEROV = 1000;
-    static const int POCET_POBOCIEK = POCET_ZAZNAMOV_ZVEROV/10;
-    static const int POCET_ZAMESTNANCOV = POCET_POBOCIEK * 4;
-    static const int POCET_FIN_OPERACI = POCET_ZAZNAMOV_ZVEROV;
     naplnPomocneTabulky();
-
+    generujZariadenia();
+    for (const auto &item: tableZariadenia) {
+        cout << item->id() << " " << item->nazovZariadenia() << endl;
+    }
 
     return 0;
 }
-
 
 void naplnPomocneTabulky() {
     DataLoader *loader = new DataLoader("../ChovnaStanica/InpExp dat/GenerovanieDat/sorceData/cities.txt");
@@ -186,200 +371,13 @@ string &generujRodCislo(bool zena) {
     return returnValue;
 }
 
-
-class zariadenia {
-private:
-    string idZariadenia;
-    string nazovZariad;
-public:
-    zariadenia(){
-    };
-    string& id() {
-        return idZariadenia;
-    };
-    string& nazovZariadenia(){
-        return nazovZariad;
-    };
-};
-
-class pobocky_zariadenia{
-private:
-    string idPoboc;
-    string idZar;
-public:
-    string& idPobocky() {
-        return idPoboc;
-    };
-    string& idZariad(){
-        return idZar;
-    };
-};
-
-class pobocky {
-private:
-    string idPoboc;
-    string kapac;
-    string pscA;
-    string adresaA;
-    string mestoA;
-public:
-    string& id() {
-        return idPoboc;
-    };
-    string& kapacita(){
-        return kapac;
-    };
-    string& psc(){
-        return pscA;
-    };
-    string& adresa(){
-        return adresaA;
-    };
-    string& mesto(){
-        return mestoA;
-    };
-
-};
-
-class zamestnanci {
-private:
-    string cisloZam;
-    string pobocka;
-    string rodCisl;
-    string menO;
-    string priezv;
-    string prac_od;
-    string prac_do;
-public:
-    string& id() {
-        return cisloZam;
-    };
-    string& idPobocky(){
-        return pobocka;
-    };
-    string& meno(){
-        return menO;
-    };
-    string& priezvisko(){
-        return priezv;
-    };
-    string& rodCislo(){
-        return rodCisl;
-    };
-    string& pradOd(){
-        return prac_od;
-    };
-    string& pradDo(){
-        return prac_do;
-    };
-};
-
-class plemena {
-private:
-    string idPlem;
-    string nazovPlem;
-public:
-    string& id() {
-        return idPlem;
-    };
-    string& nazovPlemena(){
-        return nazovPlem;
-    };
-};
-
-class zvierata {
-private:
-    string idZviera;
-    string otc;
-    string matk;
-    string menoZver;
-    string datumNar;
-    string pohlav;
-    string idPoboc;
-    string plem;
-public:
-    string& id() {
-        return idZviera;
-    };
-    string& otec(){
-        return otc;
-    };
-    string& matka(){
-        return matk;
-    };
-    string& menoZvierata(){
-        return menoZver;
-    };
-    string& datumNarodenia(){
-        return datumNar;
-    };
-    string& pohlavie(){
-        return pohlav;
-    };
-    string& idPobocky(){
-        return idPoboc;
-    };
-    string& pelemeno(){
-        return plem;
-    };
-
-};
-
-class finOperacie {
-private:
-    string idTran;
-    string idOs;
-    string datu;
-    string idZver;
-    string cen;
-    string typ;
-    string idPlem;
-    string idPoboc;
-public:
-    string& id() {
-        return idTran;
-    };
-    string& idOsoby(){
-        return idOs;
-    };
-    string& datum(){
-        return datu;
-    };
-    string& idZvierata(){
-        return idZver;
-    };
-    string& cena(){
-        return cen;
-    };
-    string& typOperacie(){
-        return typ;
-    };
-    string& idPlemena(){
-        return idPlem;
-    };
-    string& idPobocky(){
-        return idPoboc;
-    };
-
-};
-
-class zakazniciDodavatelia {
-private:
-    string idOsoby;
-    string menO;
-    string priezv;
-    string spoloc;
-public:
-    string& id() {
-        return idOsoby;
-    };
-    string& meno(){
-        return menO;
-    };
-    string& priezvisko(){
-        return priezv;
-    };
-    string& spolocnost(){
-        return spoloc;
-    };
-};
+void generujZariadenia() {
+    int index = 1;
+    for (const auto &item: zariadeniaInport) {
+        auto *data = new zariadenia;
+        data->id() = to_string(index);
+        data->nazovZariadenia() = item;
+        tableZariadenia.push_back(data);
+        index++;
+    }
+}

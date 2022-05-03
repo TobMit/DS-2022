@@ -10,4 +10,3 @@ stajna_vybeh
 hala_vybeh
 hala_stajna
 stajna_hala_vybeh
-
