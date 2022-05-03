@@ -195,7 +195,7 @@ public:
     };
 };
 
-vector<string> menaM, menaZ, ulice, priezviskaM, priezviskaZ, zariadeniaInport, zvieraMenoM, zvieraMenoZ, plemen;
+vector<string> menaM, menaZ, ulice, priezviskaM, priezviskaZ, zariadeniaInport, zvieraMenoM, zvieraMenoZ, plemen, firmi;
 vector<array<string,2>> mesta;
 
 vector<zariadenia*> tableZariadenia;
@@ -225,6 +225,7 @@ void generujPlemena();
 void generujPobocky(const int pocetPobociek);
 void generujZamestnancov(const int minPocet);
 void generujPobockyZariadenia();
+void generujZakazniciDodavatelia(const int ZAKAZNICI_DODAVATELIA);
 
 int main() {
     srand(time(NULL));
@@ -234,9 +235,10 @@ int main() {
     generujPobocky(POCET_POBOCIEK);
     generujZamestnancov(POCET_ZAMESTNANCOV_NA_CHOVNU_STANICU);
     generujPobockyZariadenia();
+    generujZakazniciDodavatelia(ZAKAZNICI_DODAVATELIA);
 
-    for (const auto &item:  tablePobockyZariadenia) {
-        cout << item->idZariad() << " "<< item->idPobocky() << endl;
+    for (const auto &item:  tableZakazniciDodavatelia) {
+        cout << item->id()<< " "<< item->meno() << " " << item->priezvisko() << " " << item->spolocnost() << endl;
     }
     /*for (const auto &item: tableZamestnanci) {
         cout << item->id() << " " << item->idPobocky() << " " << item->meno() << " " << item->priezvisko() << " " << item->rodCislo()<< " "  << item->pradOd()<< " "  << item->pradDo()<< endl;
@@ -287,10 +289,18 @@ void naplnPomocneTabulky() {
     if (loader->isOpen()) {
         naplnanieTabuliek(&zvieraMenoZ,loader);
     }
+    loader->openNew("../ChovnaStanica/InpExp dat/GenerovanieDat/sorceData/plemena.txt");
+    if (loader->isOpen()) {
+        naplnanieTabuliek(&plemen,loader);
+    }
+    loader->openNew("../ChovnaStanica/InpExp dat/GenerovanieDat/sorceData/nazvy_firiem.txt");
+    if (loader->isOpen()) {
+        naplnanieTabuliek(&firmi,loader);
+    }
 
 /*
-    for (int i = 0; i < menaZ.size(); i++) {
-        cout << menaZ.at(i) << endl;
+    for (int i = 0; i < firmi.size(); i++) {
+        cout << firmi.at(i) << endl;
     }*/
 }
 
@@ -558,5 +568,25 @@ void generujPobockyZariadenia() {
         data->idPobocky() = to_string(i + 1);
         data->idZariad() = tableZariadenia.at(rand() % tableZariadenia.size())->id();
         tablePobockyZariadenia.push_back(data);
+    }
+}
+
+void generujZakazniciDodavatelia(const int ZAKAZNICI_DODAVATELIA) {
+    for (int i = 1; i <= ZAKAZNICI_DODAVATELIA; ++i) {
+        auto *data = new zakazniciDodavatelia;
+        data->id() = to_string(i);
+        if (rand() % 2 == 1) {
+            data->meno() = menaZ.at(rand() % menaZ.size());
+            data->priezvisko() = priezviskaZ.at(rand() % priezviskaZ.size());
+        } else {
+            data->meno() = menaM.at(rand() % menaM.size());
+            data->priezvisko() = priezviskaM.at(rand() % priezviskaM.size());
+        }
+        data->spolocnost() = "";
+
+        if (rand() % 8 == 5) {
+            data->spolocnost() = firmi.at(rand() % firmi.size());
+        }
+        tableZakazniciDodavatelia.push_back(data);
     }
 }
