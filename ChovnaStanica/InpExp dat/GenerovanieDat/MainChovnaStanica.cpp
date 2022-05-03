@@ -216,7 +216,6 @@ static const int ZAKAZNICI_DODAVATELIA = POCET_FIN_OPERACI / 100;
 static const int ZACIATOK_PODNIKANIA = 2010;
 
 void spracujData();
-void ulozData(string sourceName);
 void naplnPomocneTabulky();
 void naplnanieTabuliek(vector<string> *vector, DataLoader *loader);
 string& generujRodCislo(bool zena);
@@ -241,13 +240,13 @@ int main() {
     generujZakazniciDodavatelia(ZAKAZNICI_DODAVATELIA);
     generujZviera(POCET_ZAZNAMOV_ZVEROV);
     generujFinOperacie(POCET_FIN_OPERACI);
-
+    spracujData();
     /*for (const auto &item:  tablePlemena) {
         cout << item->id()<< " "<< item->nazovPlemena()  << endl;
     }*/
-    for (const auto &item: tableFinOperacie) {
+    /*for (const auto &item: tableFinOperacie) {
         cout << item->id() << " " << item->idOsoby() << " " << item->datum() << " " << item->idZvierata() << " " << item->cena()<< " "  << item->typOperacie()<< " "  << item->idPlemena()<< " "<< item->idPobocky()<< endl;
-    }
+    }*/
 
     return 0;
 }
@@ -317,6 +316,8 @@ void naplnanieTabuliek(vector<string> *vector, DataLoader *loader) {
 
 void spracujData() {
     /// Treba vždy zo súboru odstraniť utf 8 bom - cez hex editor prvé tri byty
+
+    ofstream zapisovac;
     string sourceName[] = {"fin_operacie",
                            "plemena",
                            "pobocky",
@@ -325,41 +326,56 @@ void spracujData() {
                            "zamestnanci",
                            "zariadenia",
                            "zvierata"} ;
-    for (int i = 0; i < 8; i++) {
-        ulozData(sourceName[i]);
-    }
-}
-
-void ulozData(string sourceName) {
-    ofstream zapisovac;
-    fstream citac;
-
-    citac.open("../ChovnaStanica/InpExp dat/rawData/" + sourceName +".csv");
-    zapisovac.open("../ChovnaStanica/InpExp dat/rawData/" + sourceName + ".txt");
-    string  nacitane;
-    string delimiter = ";";
-
-    if (citac.is_open()) {
-        size_t pos = 0;
-        // nacita iba jedno meno
-
-        while (getline(citac,nacitane)) {
-            //pos = nacitane.find(delimiter);
-            //zapisovac << nacitane.substr(0, pos) << "|";
-            //nacitane.erase(0, pos + delimiter.length());
-
-            while ((pos = nacitane.find(delimiter)) != string::npos) {
-                zapisovac << nacitane.substr(0, pos) << "|";
-                nacitane.erase(0, pos + delimiter.length());
-            }
-
-            pos = nacitane.find("\r");
-            zapisovac << nacitane.substr(0, pos) << "|" << endl;
-
-        }
+    zapisovac.open("../ChovnaStanica/InpExp dat/rawData/" + sourceName[0] + ".txt");
+    for (int i = 0; i < tableFinOperacie.size(); i++) {
+        zapisovac << tableFinOperacie.at(i)->id() << "|" << tableFinOperacie.at(i)->idOsoby() << "|" << tableFinOperacie.at(i)->datum()
+                << "|" << tableFinOperacie.at(i)->idZvierata() << "|" << tableFinOperacie.at(i)->cena() << "|" << tableFinOperacie.at(i)-> typOperacie()
+                << "|" << tableFinOperacie.at(i)->idPlemena() << "|" << tableFinOperacie.at(i)->idPobocky() << "|" << endl;
     }
     zapisovac.close();
-    citac.close();
+    zapisovac.open("../ChovnaStanica/InpExp dat/rawData/" + sourceName[1] + ".txt");
+    for (int i = 0; i < tablePlemena.size(); i++) {
+        zapisovac << tablePlemena.at(i)->id() << "|" << tablePlemena.at(i)->nazovPlemena() << "|" << endl;
+    }
+    zapisovac.close();
+    zapisovac.open("../ChovnaStanica/InpExp dat/rawData/" + sourceName[2] + ".txt");
+    for (int i = 0; i < tablePobocky.size(); i++) {
+        zapisovac << tablePobocky.at(i)->id() << "|" << tablePobocky.at(i)->kapacita() << "|" << tablePobocky.at(i)->adresa()
+                << "|" << tablePobocky.at(i)->mesto() << "|" << tablePobocky.at(i)->psc()<< "|" << endl;
+    }
+    zapisovac.close();
+    zapisovac.open("../ChovnaStanica/InpExp dat/rawData/" + sourceName[3] + ".txt");
+    for (int i = 0; i < tablePobockyZariadenia.size(); i++) {
+        zapisovac << tablePobockyZariadenia.at(i)->idPobocky() << "|" << tablePobockyZariadenia.at(i)->idZariad() << "|" << endl;
+    }
+    zapisovac.close();
+    zapisovac.open("../ChovnaStanica/InpExp dat/rawData/" + sourceName[4] + ".txt");
+    for (int i = 0; i < tableZakazniciDodavatelia.size(); i++) {
+        zapisovac << tableZakazniciDodavatelia.at(i)->id() << "|" << tableZakazniciDodavatelia.at(i)->meno()
+                << "|" << tableZakazniciDodavatelia.at(i)->priezvisko() << "|" << tableZakazniciDodavatelia.at(i)->spolocnost()<< "|" << endl;
+    }
+    zapisovac.close();
+    zapisovac.open("../ChovnaStanica/InpExp dat/rawData/" + sourceName[5] + ".txt");
+    for (int i = 0; i < tableZamestnanci.size(); i++) {
+        zapisovac << tableZamestnanci.at(i)->id() << "|" << tableZamestnanci.at(i)->idPobocky()
+                  << "|" << tableZamestnanci.at(i)->rodCislo() << "|" << tableZamestnanci.at(i)->meno()
+                << "|" << tableZamestnanci.at(i)->priezvisko()<< "|" << tableZamestnanci.at(i)->pradOd()
+                << "|" << tableZamestnanci.at(i)->pradDo()<< "|" << endl;
+    }
+    zapisovac.close();
+    zapisovac.open("../ChovnaStanica/InpExp dat/rawData/" + sourceName[6] + ".txt");
+    for (int i = 0; i < tableZariadenia.size(); i++) {
+        zapisovac << tableZariadenia.at(i)->id() << "|" << tableZariadenia.at(i)->nazovZariadenia() << "|" << endl;
+    }
+    zapisovac.close();
+    zapisovac.open("../ChovnaStanica/InpExp dat/rawData/" + sourceName[7] + ".txt");
+    for (int i = 0; i < tableZvierata.size(); i++) {
+        zapisovac << tableZvierata.at(i)->id() << "|" << tableZvierata.at(i)->matka()
+                  << "|" << tableZvierata.at(i)->otec() << "|" << tableZvierata.at(i)->datumNarodenia()
+                  << "|" << tableZvierata.at(i)->pohlavie()<< "|" << tableZvierata.at(i)->idPobocky()
+                  << "|" << tableZvierata.at(i)->pelemeno()<< "|" << endl;
+    }
+    zapisovac.close();
 }
 
 string &generujRodCislo(bool zena) {
