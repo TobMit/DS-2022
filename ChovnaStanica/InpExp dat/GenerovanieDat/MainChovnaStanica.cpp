@@ -371,7 +371,7 @@ void spracujData() {
     zapisovac.open("../ChovnaStanica/InpExp dat/rawData/" + sourceName[7] + ".txt");
     for (int i = 0; i < tableZvierata.size(); i++) {
         zapisovac << tableZvierata.at(i)->id() << "|" << tableZvierata.at(i)->matka()
-                  << "|" << tableZvierata.at(i)->otec() << "|" << tableZvierata.at(i)->datumNarodenia()
+                  << "|" << tableZvierata.at(i)->otec() << "|" << tableZvierata.at(i)->menoZvierata() << "|" << tableZvierata.at(i)->datumNarodenia()
                   << "|" << tableZvierata.at(i)->pohlavie()<< "|" << tableZvierata.at(i)->idPobocky()
                   << "|" << tableZvierata.at(i)->pelemeno()<< "|" << endl;
     }
