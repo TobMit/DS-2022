@@ -6,14 +6,17 @@
 
 using namespace std;
 
-vector<string> menaM, menaZ, ulice, priezviskaM, priezviskaZ;
+vector<string> menaM, menaZ, ulice, priezviskaM, priezviskaZ, zariadenia, zvieraMenoM, zvieraMenoZ;
 vector<array<string,2>> mesta;
+
+
 
 void spracujData();
 void ulozData(string sourceName);
 void naplnPomocneTabulky();
-
 void naplnanieTabuliek(vector<string> *vector, DataLoader *loader);
+
+
 
 int main() {
     static const int POCET_ZAZNAMOV = 100000;
@@ -53,9 +56,10 @@ void naplnPomocneTabulky() {
     if (loader->isOpen()) {
         naplnanieTabuliek(&ulice,loader);
     }
-    for (int i = 0; i < ulice.size(); i++) {
-        cout << ulice.at(i) << endl;
-    }
+/*
+    for (int i = 0; i < menaM.size(); i++) {
+        cout << menaM.at(i) << endl;
+    }*/
 }
 
 void naplnanieTabuliek(vector<string> *vector, DataLoader *loader) {
@@ -111,3 +115,198 @@ void ulozData(string sourceName) {
     citac.close();
 }
 
+
+class zariadenia {
+private:
+    string idZariadenia;
+    string nazovZariad;
+public:
+    string& id() {
+        return idZariadenia;
+    };
+    string& nazovZariadenia(){
+        return nazovZariad;
+    };
+};
+
+class pobocky_zariadenia{
+private:
+    string idPoboc;
+    string idZar;
+public:
+    string& idPobocky() {
+        return idPoboc;
+    };
+    string& idZariad(){
+        return idZar;
+    };
+};
+
+class pobocky {
+private:
+    string idPoboc;
+    string kapac;
+    string pscA;
+    string adresaA;
+    string mestoA;
+public:
+    string& id() {
+        return idPoboc;
+    };
+    string& kapacita(){
+        return kapac;
+    };
+    string& psc(){
+        return pscA;
+    };
+    string& adresa(){
+        return adresaA;
+    };
+    string& mesto(){
+        return mestoA;
+    };
+
+};
+
+class zamestnanci {
+private:
+    string cisloZam;
+    string pobocka;
+    string rodCisl;
+    string menO;
+    string priezv;
+    string prac_od;
+    string prac_do;
+public:
+    string& id() {
+        return cisloZam;
+    };
+    string& idPobocky(){
+        return pobocka;
+    };
+    string& meno(){
+        return menO;
+    };
+    string& priezvisko(){
+        return priezv;
+    };
+    string& rodCislo(){
+        return rodCisl;
+    };
+    string& pradOd(){
+        return prac_od;
+    };
+    string& pradDo(){
+        return prac_do;
+    };
+};
+
+class plemena {
+private:
+    string idPlem;
+    string nazovPlem;
+public:
+    string& id() {
+        return idPlem;
+    };
+    string& nazovPlemena(){
+        return nazovPlem;
+    };
+};
+
+class zvierata {
+private:
+    string idZviera;
+    string otc;
+    string matk;
+    string menoZver;
+    string datumNar;
+    string pohlav;
+    string idPoboc;
+    string plem;
+public:
+    string& id() {
+        return idZviera;
+    };
+    string& otec(){
+        return otc;
+    };
+    string& matka(){
+        return matk;
+    };
+    string& menoZvierata(){
+        return menoZver;
+    };
+    string& datumNarodenia(){
+        return datumNar;
+    };
+    string& pohlavie(){
+        return pohlav;
+    };
+    string& idPobocky(){
+        return idPoboc;
+    };
+    string& pelemeno(){
+        return plem;
+    };
+
+};
+
+class finOperacie {
+private:
+    string idTran;
+    string idOs;
+    string datu;
+    string idZver;
+    string cen;
+    string typ;
+    string idPlem;
+    string idPoboc;
+public:
+    string& id() {
+        return idTran;
+    };
+    string& idOsoby(){
+        return idOs;
+    };
+    string& datum(){
+        return datu;
+    };
+    string& idZvierata(){
+        return idZver;
+    };
+    string& cena(){
+        return cen;
+    };
+    string& typOperacie(){
+        return typ;
+    };
+    string& idPlemena(){
+        return idPlem;
+    };
+    string& idPobocky(){
+        return idPoboc;
+    };
+
+};
+
+class zakazniciDodavatelia {
+private:
+    string idOsoby;
+    string menO;
+    string priezv;
+    string spoloc;
+public:
+    string& id() {
+        return idOsoby;
+    };
+    string& meno(){
+        return menO;
+    };
+    string& priezvisko(){
+        return priezv;
+    };
+    string& spolocnost(){
+        return spoloc;
+    };
+};
