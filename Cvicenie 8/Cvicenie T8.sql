@@ -93,6 +93,7 @@ end;
 select f_Vyskladaj_skupinu('Z',100, 0, 1, 2) as vyskladana_Skupina
     from DUAL;
 
+-- PARAMETRIZOVANÁ ZOZSTAVA------------------
 select *
 from STUDENT where rocnik = &vstup_cislo;
 -- ked s� tam && tak ti prememenna hodnotu ulozi
