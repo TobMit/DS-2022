@@ -54,4 +54,24 @@ update P_PRISPEVKY
     set ID_POBERATELA = ID_POBERATELA;
 rollback;
 
---
+-- zistiť ako sa vyvíja základná výška, predpokla je že či každým rokom rastie cena alebo nie, spraviť podmienku pre konkrétny typ prispevku c
+
+create or replace function f_vyska_prisp (id_typu_prispevku integer)
+return int
+is
+    cursor kurzor(id integer) is select ZAKL_VYSKA from P_HISTORIA where ID_TYPU = id order by DAT_OD;
+    predtym number;
+    potom number;
+begin
+
+    for riadok in kurzor(id_typu_prispevku)
+    loop
+           potom:=riadok.ZAKL_VYSKA;
+           if potom < predtym then return 0; end if;
+           predtym := predtym;
+    end loop;
+    return 1;
+
+end;
+/
+
