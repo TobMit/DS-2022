@@ -24,7 +24,34 @@ select ID_POISTENCA, count(distinct extract(year from DAT_PLATBY)) as pocet_rozn
 create or replace view akutalny_poberatelia
     as select *
             from  P_POBERATEL
-                where DAT_DO is null or DAT_DO > sysdate;
+                where DAT_DO is null or DAT_DO > sysdate
+        with check option;
+-- bude fungovať import ale nebude to videť v pohlade
+-- keď je with chcek tak by nešlo vložiť data ktoré nespňajupodmienku
+-- ak chceme urobiť nejaky insert treba triger ktorý by bol insted of a dva inserty
 
 select *
 from akutalny_poberatelia;
+
+-- triger ktorí bude kontrolovať či je poberatel aktuálny, ten dátum od a dátum do pre aktuálneho poberatela keď je vkladaý nový poberatel
+create or replace trigger akutalny_poberatelia
+    before insert or update on p_prispevky
+    for each row
+    declare
+        datum_do date;
+        datum_od date;
+    begin
+        select DAT_DO, DAT_OD into datum_do, datum_od
+            from P_POBERATEL
+                where P_POBERATEL.ID_POBERATELA = :new.id_poberatela;
+       if datum_do < sysdate or datum_od is null or datum_do > sysdate then raise_application_error(-20001, 'Poberatel nie je aktualny');
+       end if;
+
+    end;
+/
+
+update P_PRISPEVKY
+    set ID_POBERATELA = ID_POBERATELA;
+rollback;
+
+--
