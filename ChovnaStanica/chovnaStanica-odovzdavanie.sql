@@ -6,14 +6,16 @@ is
 begin
     select count(ID_POBOCKY) into obsadenos
         from ZVIERATA
-            where ID_POBOCKY = cis_pobocky
-                group by ID_POBOCKY;
+            where ID_POBOCKY = cis_pobocky;
     return obsadenos;
 end;
 /
-select ID_POBOCKY, KAPACITA, nvl(obsadenost(ID_POBOCKY),0) as obsadenost
-    from POBOCKY ;
+select ID_POBOCKY, KAPACITA, nvl(obsadenost(ID_POBOCKY),0) as obsadenost, psc, adresa, mesto
+    from POBOCKY;
 -- triger ktory aktualizuje kapacitu
+
+
+
 
 -- Triger ktorý skontrouje či nieje prevíšena kapacita pobočky
 create or replace trigger kontrola_kapacity
@@ -42,7 +44,7 @@ compound trigger
             select KAPACITA into cekovaKapacia
                 from POBOCKY
                     where ID_POBOCKY = :new.ID_POBOCKY;
-            obsadenostPobocky := obsadenost(:new.ID_POBOCKY)
+            obsadenostPobocky := obsadenost(:new.ID_POBOCKY);
         end before statement;
 
     before each row is
@@ -51,6 +53,8 @@ compound trigger
     end before each row;
 end kontrola_kapacity;
 /
+
+drop trigger kontrola_kapacity;
 
 select *
     from ZVIERATA
