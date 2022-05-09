@@ -1,3 +1,10 @@
+--Ako rozbehať tento triger
+-- 1. na DB create fun vypoc_obsadenost
+-- 2. alter table pre novy stlpce obsad_poboc - ak uz nieje vytvoreny
+-- 3. na DB create proc aktualizuj_obsadenost_pobocky, (malo by vyhodit error, to je ocakavane keď aktualizujeme celu tabulku)
+-- 4. spustit blok aby sa naplnila tabulka
+-- 5. na DB create trig kontrola_kapacity
+
 -- funkcia ktorá vráti počet obsadenia chovnej stanice
 create or replace function vypoc_obsadenost (cis_pobocky INTEGER)
     return number
@@ -11,8 +18,8 @@ begin
 end vypoc_obsadenost;
 /
 
-select ID_POBOCKY, KAPACITA, nvl(vypoc_obsadenost(ID_POBOCKY),0) as obsadenost, psc, adresa, mesto, obsad_poboc
-    from POBOCKY;
+-- vytvorenie noveho stlpca pre automaticky update
+alter table POBOCKY add obsad_poboc integer;
 
 -- procedúra kotrá akutualizuje kapacitu v tabulke
 create or replace procedure aktualizuj_obsadenost_pobocky
@@ -22,14 +29,15 @@ create or replace procedure aktualizuj_obsadenost_pobocky
     end;
 /
 
+-- naplní stlpce na správne hodnoty
 begin
     aktualizuj_obsadenost_pobocky();
 end;
 /
 
 -- Triger ktorý skontrouje či nieje prevíšena kapacita pobočky
-create or replace trigger kontrola_kapacity_insert
-    for update on ZVIERATA
+create or replace trigger kontrola_kapacity
+    for insert or update on ZVIERATA
     compound trigger
         cekovaKapacia integer;
         obsadenostPobocky integer;
@@ -47,7 +55,7 @@ create or replace trigger kontrola_kapacity_insert
         aktualizuj_obsadenost_pobocky();
     end after statement ;
 
-end kontrola_kapacity_insert;
+end kontrola_kapacity;
 /
 
 
