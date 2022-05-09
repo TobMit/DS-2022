@@ -27,56 +27,47 @@ begin
 end;
 /
 
-
-
-
 -- Triger ktorý skontrouje či nieje prevíšena kapacita pobočky
-drop trigger kontrola_kapacity;
-create or replace trigger kontrola_kapacity
-    before insert or update on ZVIERATA
-    for each row
-    declare
+create or replace trigger kontrola_kapacity_insert
+    for update on ZVIERATA
+    compound trigger
         cekovaKapacia integer;
-        obsadenostPobocky integer := obsadenost(:new.ID_POBOCKY);
-    begin
-        select KAPACITA into cekovaKapacia
-            from POBOCKY
-                where ID_POBOCKY = :new.ID_POBOCKY;
-        if (cekovaKapacia - obsadenostPobocky) <= 0 then raise_application_error(-20001, 'Pobocka je plna'); end if;
-    end;
-/
-
-
-
-create or replace trigger kontrola_kapacity
-    for insert or update of id_pobocky on ZVIERATA
-compound trigger
-    cekovaKapacia integer;
-    obsadenostPobocky integer;
-    newId integer := :new.ID_POBOCKY;
-    before statement is
-        begin
-            select KAPACITA, OBSAD_POBOC into cekovaKapacia, obsadenostPobocky
-                from POBOCKY
-                    where ID_POBOCKY = newId;
-        end before statement;
+        obsadenostPobocky integer;
 
     before each row is
     begin
+        select KAPACITA, OBSAD_POBOC into cekovaKapacia, obsadenostPobocky
+            from POBOCKY
+                where ID_POBOCKY = :new.ID_POBOCKY;
         if (cekovaKapacia - obsadenostPobocky) <= 0 then raise_application_error(-20001, 'Pobocka je plna'); end if;
     end before each row;
-end kontrola_kapacity;
+
+    after statement is
+    begin
+        aktualizuj_obsadenost_pobocky();
+    end after statement ;
+
+end kontrola_kapacity_insert;
 /
 
-drop trigger kontrola_kapacity;
 
+-- testy či to funguje
 select *
     from ZVIERATA
         where ID_ZVIERA = 1;
 
+select *
+from POBOCKY
+    where OBSAD_POBOC = KAPACITA;
+
+-- 70 je plná
 update ZVIERATA
-    set ID_POBOCKY = ID_POBOCKY
+    set ID_POBOCKY = 70
         where ID_ZVIERA = 1;
+
+select ID_POBOCKY, KAPACITA, nvl(vypoc_obsadenost(ID_POBOCKY),0) as obsadenost, psc, adresa, mesto, obsad_poboc
+    from POBOCKY
+        where OBSAD_POBOC = KAPACITA;
 rollback ;
 commit ;
 
