@@ -1,23 +1,37 @@
 -- funkcia ktorá vráti počet obsadenia chovnej stanice
-create or replace function obsadenost (cis_pobocky INTEGER)
+create or replace function vypoc_obsadenost (cis_pobocky INTEGER)
     return number
 is
-    obsadenos integer;
+    obsad integer;
 begin
-    select count(ID_POBOCKY) into obsadenos
+    select count(ID_POBOCKY) into obsad
         from ZVIERATA
             where ID_POBOCKY = cis_pobocky;
-    return obsadenos;
+    return obsad;
+end vypoc_obsadenost;
+/
+
+select ID_POBOCKY, KAPACITA, nvl(vypoc_obsadenost(ID_POBOCKY),0) as obsadenost, psc, adresa, mesto, obsad_poboc
+    from POBOCKY;
+
+-- procedúra kotrá akutualizuje kapacitu v tabulke
+create or replace procedure aktualizuj_obsadenost_pobocky
+    is
+    begin
+        update POBOCKY set POBOCKY.obsad_poboc = vypoc_obsadenost(ID_POBOCKY);
+    end;
+/
+
+begin
+    aktualizuj_obsadenost_pobocky();
 end;
 /
-select ID_POBOCKY, KAPACITA, nvl(obsadenost(ID_POBOCKY),0) as obsadenost, psc, adresa, mesto
-    from POBOCKY;
--- triger ktory aktualizuje kapacitu
 
 
 
 
 -- Triger ktorý skontrouje či nieje prevíšena kapacita pobočky
+drop trigger kontrola_kapacity;
 create or replace trigger kontrola_kapacity
     before insert or update on ZVIERATA
     for each row
@@ -39,12 +53,12 @@ create or replace trigger kontrola_kapacity
 compound trigger
     cekovaKapacia integer;
     obsadenostPobocky integer;
+    newId integer := :new.ID_POBOCKY;
     before statement is
         begin
-            select KAPACITA into cekovaKapacia
+            select KAPACITA, OBSAD_POBOC into cekovaKapacia, obsadenostPobocky
                 from POBOCKY
-                    where ID_POBOCKY = :new.ID_POBOCKY;
-            obsadenostPobocky := obsadenost(:new.ID_POBOCKY);
+                    where ID_POBOCKY = newId;
         end before statement;
 
     before each row is
@@ -58,11 +72,13 @@ drop trigger kontrola_kapacity;
 
 select *
     from ZVIERATA
-        order by ID_POBOCKY;
+        where ID_ZVIERA = 1;
 
 update ZVIERATA
-    set ID_POBOCKY = ID_POBOCKY;
+    set ID_POBOCKY = ID_POBOCKY
+        where ID_ZVIERA = 1;
 rollback ;
+commit ;
 
 drop table fin_operacie;
 drop table zakaznici_dodavatelia;
