@@ -60,7 +60,7 @@ create or replace function f_vyska_prisp (id_typu_prispevku integer)
 return int
 is
     cursor kurzor(id integer) is select ZAKL_VYSKA from P_HISTORIA where ID_TYPU = id order by DAT_OD;
-    predtym number;
+    predtym number; -- je inicializované na null takže v podmienke to prejde na else vetvu
     potom number;
 begin
 
@@ -74,4 +74,7 @@ begin
 
 end;
 /
+-- ak anomalia nerastie skonci cyklus vrati 1, ak nastane tak vrati 0 a ten return to zastavi
 
+select ID_TYPU, f_vyska_prisp(ID_TYPU)
+from P_TYP_PRISPEVKU;
