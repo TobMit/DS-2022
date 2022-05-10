@@ -91,6 +91,10 @@ select ID_OSOBY, MENO, PRIEZVISKO, SPOLOCNOST, CENA
                                where (TYP_OPERACIE = 'N' or TYP_OPERACIE = 'n') and ID_PLEM = :id_plem
                                group by ID_PLEM);
 
+-- Výpis všetkých chovných staníc, ktoré v súčasnosti nemajú voľnú kapacitu pre ďalšie zvieratá.
+select *
+    from POBOCKY
+        where KAPACITA = OBSAD_POBOC;
 ----------------------------------------------------------------------------
 
 select ID_PLEM, min(cena)
