@@ -22,16 +22,20 @@ end vypoc_obsadenost;
 alter table POBOCKY add obsad_poboc integer;
 
 -- procedúra kotrá akutualizuje kapacitu v tabulke
-create or replace procedure aktualizuj_obsadenost_pobocky
+create or replace procedure aktualizuj_obsadenost_pobocky(cis_poboc integer)
     is
     begin
-        update POBOCKY set POBOCKY.obsad_poboc = vypoc_obsadenost(ID_POBOCKY);
+        if cis_poboc > 1 then
+            update POBOCKY set POBOCKY.obsad_poboc = vypoc_obsadenost(ID_POBOCKY) where ID_POBOCKY = cis_poboc;
+        else
+            update POBOCKY set POBOCKY.obsad_poboc = vypoc_obsadenost(ID_POBOCKY);
+        end if;
     end;
 /
 
 -- naplní stlpce na správne hodnoty
 begin
-    aktualizuj_obsadenost_pobocky();
+    aktualizuj_obsadenost_pobocky(0);
 end;
 /
 
@@ -41,6 +45,7 @@ create or replace trigger kontrola_kapacity
     compound trigger
         cekovaKapacia integer;
         obsadenostPobocky integer;
+        newId integer := :new.ID_POBOCKY;
 
     before each row is
     begin
@@ -52,7 +57,7 @@ create or replace trigger kontrola_kapacity
 
     after statement is
     begin
-        aktualizuj_obsadenost_pobocky();
+        aktualizuj_obsadenost_pobocky(newId);
     end after statement ;
 
 end kontrola_kapacity;
