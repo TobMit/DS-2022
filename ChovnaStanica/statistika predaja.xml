@@ -57,13 +57,13 @@
 			<SUBTITLE_ALIGNMENT><![CDATA[LEFT]]></SUBTITLE_ALIGNMENT>
 		</CustomValues>
 		<query>
-			<sql><![CDATA[select to_char(datum,'Month')as mesiac, 'GRAFPOCET',count(id_zviera)
+			<sql><![CDATA[select to_char(datum,'MM-Month')as mesiac, 'GRAFPOCET',count(id_zviera)
     from fin_operacie
         where id_pobocky=:ID_POBOCKY
             and (typ_operacie = 'P' or typ_operacie = 'p') 
             and id_zviera is not null
-            group by to_char(datum,'Month')
-                order by mesiac]]></sql>
+            group by to_char(datum,'MM-Month')
+                order by to_char(datum,'MM-Month')]]></sql>
 			<binds>
 				<bind id="ID_POBOCKY">
 					<prompt><![CDATA[ID_POBOCKY]]></prompt>
