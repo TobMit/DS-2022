@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<displays>
+<display id="acf49720-0180-1000-8001-0ad337042fc3" type="" style="Table" enable="true">
+	<name><![CDATA[Statistika predaja]]></name>
+	<description><![CDATA[]]></description>
+	<tooltip><![CDATA[]]></tooltip>
+	<drillclass><![CDATA[]]></drillclass>
+	<CustomValues>
+		<TYPE><![CDATA[horizontal]]></TYPE>
+	</CustomValues>
+	<query>
+		<sql><![CDATA[select * 
+    from pobocky]]></sql>
+	</query>
+	<display id="null" type="" style="Table" enable="true">
+		<name><![CDATA[predaj podla zariadenia]]></name>
+		<description><![CDATA[]]></description>
+		<tooltip><![CDATA[]]></tooltip>
+		<drillclass><![CDATA[]]></drillclass>
+		<CustomValues>
+			<TYPE><![CDATA[horizontal]]></TYPE>
+		</CustomValues>
+		<query>
+			<sql><![CDATA[select to_char(datum,'Month')as mesiac, count(id_zviera)
+    from fin_operacie
+        where id_pobocky=:ID_POBOCKY
+            and (typ_operacie = 'P' or typ_operacie = 'p') 
+            and id_zviera is not null
+            group by to_char(datum,'Month')
+                order by mesiac]]></sql>
+			<binds>
+				<bind id="ID_POBOCKY">
+					<prompt><![CDATA[ID_POBOCKY]]></prompt>
+					<tooltip><![CDATA[ID_POBOCKY]]></tooltip>
+					<value><![CDATA[NULL_VALUE]]></value>
+					<bracket><![CDATA[null]]></bracket>
+				</bind>
+			</binds>
+		</query>
+	</display>
+</display>
+</displays>
