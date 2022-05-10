@@ -109,10 +109,31 @@ select ID_OSOBY, meno, PRIEZVISKO, SPOLOCNOST, count (ID_ZVIERA)
             having count(ID_ZVIERA) > 3
                 order by count(ID_ZVIERA) desc ;
 
+-- cursor
+create or replace function f_hospodarenie (pobocka_id integer)
+    return int
+    is
+    cursor kurzor(id integer) is select cena, typ_operacie from FIN_OPERACIE where ID_POBOCKY = id;
+    vyslednaCena number := 0;
+begin
+
+    for riadok in kurzor(pobocka_id)
+        loop
+            if riadok.TYP_OPERACIE = 'P' then vyslednaCena := vyslednaCena + riadok.CENA;
+            else vyslednaCena := vyslednaCena - riadok.CENA;
+            end if;
+        end loop;
+
+    return vyslednaCena;
+end;
+/
+drop function f_hospodarenie;
 ----------------------------------------------------------------------------
 select *
 from FIN_OPERACIE
     where ID_OSOBY = 15 and (TYP_OPERACIE = 'P' or TYP_OPERACIE = 'p') and ID_ZVIERA is not null order by DATUM;
+select ID_POBOCKY, KAPACITA, PSC, ADRESA, MESTO, f_hospodarenie(ID_POBOCKY)
+    from POBOCKY;
 ----------------------------------------------------------------------------
 
 select ID_PLEM, min(cena)
