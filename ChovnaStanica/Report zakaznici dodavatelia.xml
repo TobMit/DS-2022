@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<displays>
+<display id="ae65756b-0180-1000-803b-0ad337041167" type="" style="Table" enable="true">
+	<name><![CDATA[Zakaznici_dodavatelia]]></name>
+	<description><![CDATA[]]></description>
+	<tooltip><![CDATA[]]></tooltip>
+	<drillclass><![CDATA[]]></drillclass>
+	<CustomValues>
+		<TYPE><![CDATA[horizontal]]></TYPE>
+	</CustomValues>
+	<query>
+		<sql><![CDATA[select id_osoby, meno, priezvisko, case when spolocnost is not null then spolocnost else '--' end as spolocnosti
+    from zakaznici_dodavatelia]]></sql>
+	</query>
+	<display id="null" type="" style="Chart" enable="true">
+		<name><![CDATA[nakup/predaj]]></name>
+		<description><![CDATA[]]></description>
+		<tooltip><![CDATA[]]></tooltip>
+		<drillclass><![CDATA[]]></drillclass>
+		<CustomValues>
+			<Y1AXIS_SCALE_INCREMENT><![CDATA[20.0]]></Y1AXIS_SCALE_INCREMENT>
+			<Y1AXIS_TITLE_ALIGNMENT><![CDATA[CENTER]]></Y1AXIS_TITLE_ALIGNMENT>
+			<LEGEND_LOCATION><![CDATA[AUTOMATIC]]></LEGEND_LOCATION>
+			<LEGEND_ALIGNMENT><![CDATA[LEFT]]></LEGEND_ALIGNMENT>
+			<SUBTITLE><![CDATA[false]]></SUBTITLE>
+			<PLOT_DATALABELS_SLICE_POSITION><![CDATA[OUTSIDE_SLICE_LINE]]></PLOT_DATALABELS_SLICE_POSITION>
+			<DATA_MAP_COLUMNS><![CDATA[\,"'GRAF'"]]></DATA_MAP_COLUMNS>
+			<FOOTNOTE><![CDATA[false]]></FOOTNOTE>
+			<XAXIS_TITLE_ALIGNMENT><![CDATA[CENTER]]></XAXIS_TITLE_ALIGNMENT>
+			<PLOT_DATALABELS><![CDATA[false]]></PLOT_DATALABELS>
+			<XAXIS_TICK_LABEL_ROTATE><![CDATA[HORIZONTAL]]></XAXIS_TICK_LABEL_ROTATE>
+			<TYPE><![CDATA[PIE]]></TYPE>
+			<GRID_WIDTH><![CDATA[THINNER]]></GRID_WIDTH>
+			<FOOTNOTE_ALIGNMENT><![CDATA[LEFT]]></FOOTNOTE_ALIGNMENT>
+			<DATA_MAP_COLNAMES><![CDATA[\,"'GRAF'","COUNT(ID_TRANSAKCIA)","TYP_OPERACIE"]]></DATA_MAP_COLNAMES>
+			<DATA_MAP_SERIES><![CDATA[\,"TYP_OPERACIE"]]></DATA_MAP_SERIES>
+			<DATA_MAP_COUNT><![CDATA[1]]></DATA_MAP_COUNT>
+			<STYLE><![CDATA[Default]]></STYLE>
+			<TITLE_ALIGNMENT><![CDATA[LEFT]]></TITLE_ALIGNMENT>
+			<XAXIS_SCALE_INCREMENT><![CDATA[20.0]]></XAXIS_SCALE_INCREMENT>
+			<PLOT_DATALABELS_SLICE_TYPE><![CDATA[PERCENT_VALUE]]></PLOT_DATALABELS_SLICE_TYPE>
+			<Y2AXIS_TICK_LABEL_ROTATE><![CDATA[HORIZONTAL]]></Y2AXIS_TICK_LABEL_ROTATE>
+			<DATA_MAP_VALUES><![CDATA[\,"COUNT(ID_TRANSAKCIA)"]]></DATA_MAP_VALUES>
+			<Y1AXIS_TICK_LABEL_ROTATE><![CDATA[HORIZONTAL]]></Y1AXIS_TICK_LABEL_ROTATE>
+			<TITLE><![CDATA[false]]></TITLE>
+			<Y2AXIS_SCALE_INCREMENT><![CDATA[20.0]]></Y2AXIS_SCALE_INCREMENT>
+			<PLOT_DATATIPS_PERCENT><![CDATA[true]]></PLOT_DATATIPS_PERCENT>
+			<Y2AXIS_TITLE_ALIGNMENT><![CDATA[CENTER]]></Y2AXIS_TITLE_ALIGNMENT>
+			<SUBTITLE_ALIGNMENT><![CDATA[LEFT]]></SUBTITLE_ALIGNMENT>
+		</CustomValues>
+		<query>
+			<sql><![CDATA[select 'GRAF',count(id_transakcia), case when id_zviera is null and typ_operacie = 'P' then 'Nakup potrieb' 
+                                            when id_zviera is null and typ_operacie = 'N' then 'Predaj potrieb' 
+                                            when id_zviera is not null and typ_operacie = 'P' then 'Nakup zvierat' 
+                                            when id_zviera is not null and typ_operacie = 'N' then 'Predaj zvierat' 
+                                            end
+                                            as typ_operacie
+from fin_operacie
+where id_osoby = :ID_OSOBY
+group by case when id_zviera is null and typ_operacie = 'P' then 'Nakup potrieb' 
+                                            when id_zviera is null and typ_operacie = 'N' then 'Predaj potrieb' 
+                                            when id_zviera is not null and typ_operacie = 'P' then 'Nakup zvierat' 
+                                            when id_zviera is not null and typ_operacie = 'N' then 'Predaj zvierat' 
+                                            end]]></sql>
+			<binds>
+				<bind id="ID_OSOBY">
+					<prompt><![CDATA[ID_OSOBY]]></prompt>
+					<tooltip><![CDATA[ID_OSOBY]]></tooltip>
+					<value><![CDATA[NULL_VALUE]]></value>
+					<bracket><![CDATA[null]]></bracket>
+				</bind>
+			</binds>
+		</query>
+	</display>
+</display>
+</displays>

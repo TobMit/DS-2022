@@ -13,7 +13,7 @@
     from pobocky]]></sql>
 	</query>
 	<display id="null" type="" style="Chart" enable="true">
-		<name><![CDATA[predaj podla zariadenia]]></name>
+		<name><![CDATA[predaj podla pobocky]]></name>
 		<description><![CDATA[]]></description>
 		<tooltip><![CDATA[]]></tooltip>
 		<drillclass><![CDATA[]]></drillclass>
@@ -37,8 +37,8 @@
 			<PLOT_DATALABELS_BAR_POSITION><![CDATA[ABOVE]]></PLOT_DATALABELS_BAR_POSITION>
 			<FOOTNOTE_ALIGNMENT><![CDATA[LEFT]]></FOOTNOTE_ALIGNMENT>
 			<XAXIS_TICK_LABEL_SKIP_MODE><![CDATA[AUTOMATIC]]></XAXIS_TICK_LABEL_SKIP_MODE>
-			<DATA_MAP_COLNAMES><![CDATA[\,"'GRAFPOCET'","COUNT(ID_ZVIERA)","MESIAC"]]></DATA_MAP_COLNAMES>
-			<DATA_MAP_SERIES><![CDATA[\,"'GRAFPOCET'"]]></DATA_MAP_SERIES>
+			<DATA_MAP_COLNAMES><![CDATA[\,"'GRAFPOCTOV'","COUNT(ID_ZVIERA)","MESIAC"]]></DATA_MAP_COLNAMES>
+			<DATA_MAP_SERIES><![CDATA[\,"'GRAFPOCTOV'"]]></DATA_MAP_SERIES>
 			<Y2AXIS_LOGARITHMIC_BASE><![CDATA[BASE_10]]></Y2AXIS_LOGARITHMIC_BASE>
 			<GRID><![CDATA[false]]></GRID>
 			<DATA_MAP_COUNT><![CDATA[1]]></DATA_MAP_COUNT>
@@ -57,13 +57,17 @@
 			<SUBTITLE_ALIGNMENT><![CDATA[LEFT]]></SUBTITLE_ALIGNMENT>
 		</CustomValues>
 		<query>
-			<sql><![CDATA[select to_char(datum,'MM-Month')as mesiac, 'GRAFPOCET',count(id_zviera)
-    from fin_operacie
-        where id_pobocky=:ID_POBOCKY
-            and (typ_operacie = 'P' or typ_operacie = 'p') 
+			<sql><![CDATA[with calendar as (
+    select add_months(trunc(to_date(2022,'yyyy'),'yyyy'), level-1) as mon
+    from dual
+    connect by level <=12)
+select to_char(mon, 'MM-Month')  as mesiac,count(id_zviera), 'GRAFPOCTOV'
+    from calendar left outer join fin_operacie on to_char(datum,'MM-MONTH') = to_char(calendar.mon,'MM-MONTH')
+    where id_pobocky=:ID_POBOCKY
+            and (typ_operacie = 'P' or typ_operacie = 'p')
             and id_zviera is not null
-            group by to_char(datum,'MM-Month')
-                order by to_char(datum,'MM-Month')]]></sql>
+        GROUP BY mon
+            order by mesiac]]></sql>
 			<binds>
 				<bind id="ID_POBOCKY">
 					<prompt><![CDATA[ID_POBOCKY]]></prompt>
