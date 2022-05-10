@@ -22,16 +22,20 @@ end vypoc_obsadenost;
 alter table POBOCKY add obsad_poboc integer;
 
 -- procedúra kotrá akutualizuje kapacitu v tabulke
-create or replace procedure aktualizuj_obsadenost_pobocky
+create or replace procedure aktualizuj_obsadenost_pobocky(cis_poboc integer)
     is
     begin
-        update POBOCKY set POBOCKY.obsad_poboc = vypoc_obsadenost(ID_POBOCKY);
+        if cis_poboc > 1 then
+            update POBOCKY set POBOCKY.obsad_poboc = vypoc_obsadenost(ID_POBOCKY) where ID_POBOCKY = cis_poboc;
+        else
+            update POBOCKY set POBOCKY.obsad_poboc = vypoc_obsadenost(ID_POBOCKY);
+        end if;
     end;
 /
 
 -- naplní stlpce na správne hodnoty
 begin
-    aktualizuj_obsadenost_pobocky();
+    aktualizuj_obsadenost_pobocky(0);
 end;
 /
 
@@ -41,6 +45,7 @@ create or replace trigger kontrola_kapacity
     compound trigger
         cekovaKapacia integer;
         obsadenostPobocky integer;
+        newId integer := :new.ID_POBOCKY;
 
     before each row is
     begin
@@ -52,7 +57,7 @@ create or replace trigger kontrola_kapacity
 
     after statement is
     begin
-        aktualizuj_obsadenost_pobocky();
+        aktualizuj_obsadenost_pobocky(newId);
     end after statement ;
 
 end kontrola_kapacity;
@@ -78,6 +83,47 @@ select ID_POBOCKY, KAPACITA, nvl(vypoc_obsadenost(ID_POBOCKY),0) as obsadenost, 
         where OBSAD_POBOC = KAPACITA;
 rollback ;
 commit ;
+
+
+-------------------------------------------------------------------------------
+-- Výpis najlepších dodávateľov pre dané plemeno zvierat (majú najnižšie ceny).
+
+select ID_OSOBY, MENO, PRIEZVISKO, SPOLOCNOST, CENA
+    from FIN_OPERACIE join ZAKAZNICI_DODAVATELIA using (id_osoby)
+        where (TYP_OPERACIE = 'N' or TYP_OPERACIE = 'n') and ID_PLEM = :id_plem
+                and CENA = (select min(cena)
+                               from FIN_OPERACIE
+                               where (TYP_OPERACIE = 'N' or TYP_OPERACIE = 'n') and ID_PLEM = :id_plem
+                               group by ID_PLEM);
+
+-- Výpis všetkých chovných staníc, ktoré v súčasnosti nemajú voľnú kapacitu pre ďalšie zvieratá.
+select *
+    from POBOCKY
+        where KAPACITA = OBSAD_POBOC;
+
+-- Výpis zákazníkov, ktorí kúpili viac ako 3 zvieratá.
+select ID_OSOBY, meno, PRIEZVISKO, SPOLOCNOST, count (ID_ZVIERA)
+    from FIN_OPERACIE join ZAKAZNICI_DODAVATELIA using (id_osoby)
+        where  TYP_OPERACIE = 'P' or TYP_OPERACIE = 'p'
+        group by ID_OSOBY, meno, PRIEZVISKO, SPOLOCNOST
+            having count(ID_ZVIERA) > 3
+                order by count(ID_ZVIERA) desc ;
+
+----------------------------------------------------------------------------
+select *
+from FIN_OPERACIE
+    where ID_OSOBY = 15 and (TYP_OPERACIE = 'P' or TYP_OPERACIE = 'p') and ID_ZVIERA is not null order by DATUM;
+----------------------------------------------------------------------------
+
+select ID_PLEM, min(cena)
+from FIN_OPERACIE
+where (TYP_OPERACIE = 'N' or TYP_OPERACIE = 'n')
+group by ID_PLEM
+order by ID_PLEM;
+
+select count(*)
+    from FIN_OPERACIE
+        where ID_PLEM = 1;
 
 drop table fin_operacie;
 drop table zakaznici_dodavatelia;
