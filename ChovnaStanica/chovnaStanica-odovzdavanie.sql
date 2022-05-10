@@ -79,6 +79,30 @@ select ID_POBOCKY, KAPACITA, nvl(vypoc_obsadenost(ID_POBOCKY),0) as obsadenost, 
 rollback ;
 commit ;
 
+
+-------------------------------------------------------------------------------
+-- Výpis najlepších dodávateľov pre dané plemeno zvierat (majú najnižšie ceny).
+
+select ID_OSOBY, MENO, PRIEZVISKO, SPOLOCNOST, CENA
+    from FIN_OPERACIE join ZAKAZNICI_DODAVATELIA using (id_osoby)
+        where (TYP_OPERACIE = 'N' or TYP_OPERACIE = 'n') and ID_PLEM = :id_plem
+                and CENA = (select min(cena)
+                               from FIN_OPERACIE
+                               where (TYP_OPERACIE = 'N' or TYP_OPERACIE = 'n') and ID_PLEM = :id_plem
+                               group by ID_PLEM);
+
+----------------------------------------------------------------------------
+
+select ID_PLEM, min(cena)
+from FIN_OPERACIE
+where (TYP_OPERACIE = 'N' or TYP_OPERACIE = 'n')
+group by ID_PLEM
+order by ID_PLEM;
+
+select count(*)
+    from FIN_OPERACIE
+        where ID_PLEM = 1;
+
 drop table fin_operacie;
 drop table zakaznici_dodavatelia;
 drop table zamestnanci;
