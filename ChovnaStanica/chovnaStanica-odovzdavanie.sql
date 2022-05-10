@@ -95,6 +95,19 @@ select ID_OSOBY, MENO, PRIEZVISKO, SPOLOCNOST, CENA
 select *
     from POBOCKY
         where KAPACITA = OBSAD_POBOC;
+
+-- Výpis zákazníkov, ktorí kúpili viac ako 3 zvieratá.
+select ID_OSOBY, meno, PRIEZVISKO, SPOLOCNOST, count (ID_ZVIERA)
+    from FIN_OPERACIE join ZAKAZNICI_DODAVATELIA using (id_osoby)
+        where  TYP_OPERACIE = 'P' or TYP_OPERACIE = 'p'
+        group by ID_OSOBY, meno, PRIEZVISKO, SPOLOCNOST
+            having count(ID_ZVIERA) > 3
+                order by count(ID_ZVIERA) desc ;
+
+----------------------------------------------------------------------------
+select *
+from FIN_OPERACIE
+    where ID_OSOBY = 15 and (TYP_OPERACIE = 'P' or TYP_OPERACIE = 'p') and ID_ZVIERA is not null order by DATUM;
 ----------------------------------------------------------------------------
 
 select ID_PLEM, min(cena)
