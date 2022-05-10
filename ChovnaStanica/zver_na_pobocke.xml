@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<displays>
+<display id="af6ba1b6-0180-1000-8017-ac1e01b05b42" type="" style="Table" enable="true">
+	<name><![CDATA[CS_zver_pobocka]]></name>
+	<description><![CDATA[]]></description>
+	<tooltip><![CDATA[]]></tooltip>
+	<drillclass><![CDATA[]]></drillclass>
+	<CustomValues>
+		<TYPE><![CDATA[horizontal]]></TYPE>
+	</CustomValues>
+	<query>
+		<sql><![CDATA[SELECT id_pobocky FROM pobocky]]></sql>
+	</query>
+	<display id="null" type="" style="Table" enable="true">
+		<name><![CDATA[zvierataa]]></name>
+		<description><![CDATA[]]></description>
+		<tooltip><![CDATA[]]></tooltip>
+		<drillclass><![CDATA[]]></drillclass>
+		<CustomValues>
+			<TYPE><![CDATA[horizontal]]></TYPE>
+		</CustomValues>
+		<query>
+			<sql><![CDATA[SELECT * FROM zvierata
+    WHERE id_pobocky=:ID_POBOCKY]]></sql>
+			<binds>
+				<bind id="ID_POBOCKY">
+					<prompt><![CDATA[ID_POBOCKY]]></prompt>
+					<tooltip><![CDATA[ID_POBOCKY]]></tooltip>
+					<value><![CDATA[NULL_VALUE]]></value>
+					<bracket><![CDATA[null]]></bracket>
+				</bind>
+			</binds>
+		</query>
+	</display>
+</display>
+</displays>
