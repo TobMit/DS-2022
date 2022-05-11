@@ -30,4 +30,12 @@ select distinct meno, PRIEZVISKO, ID_TYPU as typ
     from P_OSOBA join P_POBERATEL using (rod_cislo)
         group by ID_TYPU, PRIEZVISKO, meno;
 
---
+-- View - prehľad s informáciami o všetkých zamestnancoch ktorí bývajú na ulici 'KarpatskáƉ
+create or replace view ulKarpatska
+as select *
+    from P_OSOBA join P_ZAMESTNANEC using(rod_cislo)
+        where ULICA like '%Karpatska%';
+
+select * from ulKarpatska;
+
+-- Vytvorte procedúru, po zadaná rod_cisla, dat_od a dat_do, ktorá vypíše sumu, ktorú osoba zinkasovala za príspevky
