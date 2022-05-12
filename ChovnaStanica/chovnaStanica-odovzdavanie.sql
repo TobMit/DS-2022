@@ -222,9 +222,9 @@ select distinct zvieratko.id_zviera, zvieratko.matka, maminka.plemeno as plemeno
                             where maminka.plemeno <> tatinko.plemeno;
 
 -- Vypis surodencov (rovnakí rodicia) daneho zvierata
-select mat.MENO_ZVER, mat.ID_ZVIERA, mat.MATKA, mat.OTEC, mat.PLEMENO, mat.ID_POBOCKY
-    from zvierata syn join ZVIERATA mat on syn.MATKA = mat.MATKA
-        where syn.ID_ZVIERA <> mat.ID_ZVIERA and syn.OTEC = mat.OTEC and syn.ID_ZVIERA = :id_zviera;
+select sur.MENO_ZVER, sur.ID_ZVIERA, sur.MATKA, sur.OTEC, sur.PLEMENO, sur.ID_POBOCKY
+    from zvierata syn join ZVIERATA sur on syn.MATKA = sur.MATKA
+        where syn.ID_ZVIERA <> sur.ID_ZVIERA and syn.OTEC = sur.OTEC and syn.ID_ZVIERA = :id_zviera;
 
 -- Vypis najlepsich dodavatelov pre dane plemeno zvierat (maju najnizsie ceny).
 select ID_OSOBY, MENO, PRIEZVISKO, SPOLOCNOST, CENA
