@@ -103,4 +103,9 @@ select ID_POBERATELA, ROD_CISLO, avg(suma)
             having avg(suma) >= 20
                 order by avg(suma) ;
 
---
+-- Ku každému typu príspevku vypíšte jeho ID, popis, základnú výšku a zoznam jeho histórie.
+-- Vypíšte aj tie typy príspevkov, ku ktorým neevidujeme žiadny historický záznam.
+
+select ID_TYPU, POPIS, prispev.ZAKL_VYSKA, dat_od, DAT_DO, his.ZAKL_VYSKA
+    from P_TYP_PRISPEVKU prispev left join P_HISTORIA his using (id_typu);
+
