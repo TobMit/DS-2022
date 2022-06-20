@@ -77,3 +77,30 @@ create or replace trigger zamestnanecZTP
         end if;
     end;
 /
+
+-- Osloboďte od platenia poistného všetkých zamestnancov firiem sídliacich na Slovensku, ktorí majú aktuálne menej ako 5 zamestnancov, príp. Žiadneho.
+update P_POISTENIE
+set OSLOBODENY = 'A'
+where ID_POISTENCA in (select ID_POISTENCA
+                       from P_ZAMESTNANEC
+                                     join P_ZAMESTNAVATEL PZ on PZ.ICO = P_ZAMESTNANEC.ID_ZAMESTNAVATELA
+                                         where ico in (select ICO
+                                                            from P_ZAMESTNAVATEL join P_MESTO on P_ZAMESTNAVATEL.PSC = P_MESTO.PSC
+                                                                  join P_MESTO PM on PM.PSC = P_ZAMESTNAVATEL.PSC
+                                                                  join P_OKRES PO on PO.ID_OKRESU = P_MESTO.ID_OKRESU
+                                                                  join P_KRAJ PK on PK.ID_KRAJA = PO.ID_KRAJA
+                                                                  join P_KRAJINA P on P.ID_KRAJINY = PK.ID_KRAJINY
+                                                                  join P_ZAMESTNANEC Z on P_ZAMESTNAVATEL.ICO = Z.ID_ZAMESTNAVATELA
+                                                                    where p.N_KRAJINY = 'Slovensko'
+                                                                    group by ICO
+                                                                    having count(ico) < 5));
+
+rollback;
+-- Vypíšte zoznam poberateľov, ktorých príspevky boli priemerne nad 20€.
+select ID_POBERATELA, ROD_CISLO, avg(suma)
+    from P_POBERATEL join P_PRISPEVKY using (id_poberatela)
+        group by ID_POBERATELA, ROD_CISLO
+            having avg(suma) >= 20
+                order by avg(suma) ;
+
+--
