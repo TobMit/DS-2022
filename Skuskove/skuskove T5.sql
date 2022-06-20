@@ -77,6 +77,7 @@ create or replace trigger zamestnanecZTP
         end if;
     end;
 /
+drop trigger zamestnanecZTP;
 
 -- Osloboďte od platenia poistného všetkých zamestnancov firiem sídliacich na Slovensku, ktorí majú aktuálne menej ako 5 zamestnancov, príp. Žiadneho.
 update P_POISTENIE
@@ -116,4 +117,37 @@ select meno, PRIEZVISKO, ROD_CISLO, max(suma)
                     group by ROD_CISLO, PRIEZVISKO, meno
                         having max(SUMA) <= 300;
 
+-- napíšte skprip ktorý vytvorí nasledovné tabuľky
+create table TAB_CATEGORY (
+  id_category integer not null,
+  name varchar2(20) null,
+  primary key (id_category)
+);
+
+create table TAB_COMPONENT (
+    id_componet integer not null,
+    category integer not null,
+    info varchar2(50) null,
+    primary key (id_componet),
+    foreign key (category) references TAB_CATEGORY(id_category)
+);
+drop table TAB_COMPONENT;
+drop table TAB_CATEGORY;
+
+-- pomocou ERA diagram citatel - kniha (vypožičanie knihy)
+Kniha(#isbn, nazov, autor, vidavatelstvo)
+Citatel(#id_citatela, meno, priezvisko, adresa)
+kniznica(#id_kniznice, isbn(FK), id_citatela(FK), datum_vypozicania, vratenia)
+
+kardinalita vzťahuje m:N pretože knihu môže mať požičanú iba jedn používateľ ale jeden používateľ môže mať požičanch viac kních
+Nepovinnné členstvo z oboch strán
+
+-- Majme atribút cena v tabuľke faktúra, ktorý nech má dátový typ Integer. Zabezpečte, aby hodnota nemohla byť záporná.
+create or replace trigger zapornaHOdnota
+    before insert or update on faktura
+    for each row
+    begin
+        if :new.cena < 0 then raise_application_error(-20001, 'Cena nemôze byt zaporna'); end if;
+    end;
+/
 
