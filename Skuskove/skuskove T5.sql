@@ -109,3 +109,11 @@ select ID_POBERATELA, ROD_CISLO, avg(suma)
 select ID_TYPU, POPIS, prispev.ZAKL_VYSKA, dat_od, DAT_DO, his.ZAKL_VYSKA
     from P_TYP_PRISPEVKU prispev left join P_HISTORIA his using (id_typu);
 
+--Vypíšte zoznam osôb, ktoré nedostávajú viac ako 300€ mesačne. Pokryte aj prípad, že osoba nedostáva žiadne príspevky.
+select meno, PRIEZVISKO, ROD_CISLO, max(suma)
+    from P_OSOBA left join P_POBERATEL using(rod_cislo)
+                 left join P_PRISPEVKY using(id_poberatela)
+                    group by ROD_CISLO, PRIEZVISKO, meno
+                        having max(SUMA) <= 300;
+
+
