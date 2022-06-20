@@ -39,3 +39,25 @@ select *
     from P_ODVOD_PLATBA join P_POISTENIE pois using (id_poistenca) join P_ZAMESTNAVATEL zam on  zam.ico = pois.ID_PLATITELA
         where to_char(DAT_PLATBY, 'MM.YYYY') = to_char(add_months(sysdate,-67), 'MM.YYYY') and zam.NAZOV = 'ZU'
             and pois.ROD_CISLO in (select ROD_CISLO from P_ZAMESTNANEC where DAT_OD <= sysdate and (DAT_DO >= sysdate or DAT_DO is null) );
+
+-- aký bude výsledok selectu ak použijeme tieto príkazy
+create table randomTAbula (
+    hodnota integer not null,
+    primary key (hodnota)
+);
+
+insert into randomTAbula values (1);
+insert into randomTAbula values (2);
+alter table randomTAbula add (pocet integer);
+rollback ;
+insert into randomTAbula values (3,4);
+select count(*) from randomTAbula;
+select *
+from randomTAbula;
+
+drop table randomTAbula;
+
+-- Doplňte select, ktorý má vypísať pre každú osobu jej rodné číslo, meno, priezvisko a koľkokrát bola osobou ZŤP.
+SELECT rod_cislo, meno, priezvisko, COUNT(*)
+    FROM p_osoba JOIN p_ZTP USING(rod_cislo)
+        group by rod_cislo, meno, priezvisko order by ROD_CISLO;
