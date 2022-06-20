@@ -151,3 +151,38 @@ create or replace trigger zapornaHOdnota
     end;
 /
 
+-- vymažte všetkým ženám za posledné 2 roky odvody
+delete from P_ODVOD_PLATBA
+    where extract(year from DAT_PLATBY) >= extract(year from sysdate) -6
+      and ID_POISTENCA in ( select ID_POISTENCA from P_POISTENIE
+                                                where substr(ROD_CISLO, 3,1) = 5 or substr(ROD_CISLO, 3,1) = 6);
+
+rollback ;
+
+-- triger ktorý zabráni do p_prispevky vkladať sumy záporné
+create or replace trigger zapornaSuma
+    before insert or update of suma on P_PRISPEVKY
+    for each row
+    begin
+        if :new.suma < 0 then raise_application_error(-20001, 'Zaporna suma'); end if;
+    end;
+/
+
+update p_prispevky set suma = -1;
+drop trigger zapornaSuma;
+rollback;
+
+-- oslobodiť všetkých zamestnancov firmi ktorá je slovenská a menej ako 5 zemstnancov
+update P_POISTENIE
+    set OSLOBODENY = 'A'
+        where ID_POISTENCA in (select ID_POISTENCA
+                                    from P_ZAMESTNANEC join p_zamestnavatel on (P_ZAMESTNANEC.ID_ZAMESTNAVATELA = P_ZAMESTNAVATEL.ICO)
+                                        where ico in (select ico
+                                                        from P_ZAMESTNAVATEL join P_ZAMESTNANEC on (P_ZAMESTNANEC.ID_ZAMESTNAVATELA = P_ZAMESTNAVATEL.ICO)
+                                                                join P_MESTO using (psc)
+                                                                join P_OKRES using (id_okresu)
+                                                                join p_kraj using (id_kraja)
+                                                                join P_KRAJINA using (id_krajiny)
+                                                        where N_KRAJINY = 'Slovensko'
+                                                            group by ico
+                                                                having count(ROD_CISLO) < 5));
