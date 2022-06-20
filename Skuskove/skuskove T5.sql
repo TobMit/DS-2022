@@ -61,3 +61,19 @@ drop table randomTAbula;
 SELECT rod_cislo, meno, priezvisko, COUNT(*)
     FROM p_osoba JOIN p_ZTP USING(rod_cislo)
         group by rod_cislo, meno, priezvisko order by ROD_CISLO;
+
+-- Vytvorte trigger, ktorý znemožní skončenie pracovného pomeru zamestnanca, ktorý mal za posledný polrok evidované aspoň jedno ZŤP.
+create or replace trigger zamestnanecZTP
+    before insert or update on P_ZAMESTNANEC
+    for each row
+    declare
+        pocet integer;
+    begin
+        select count(ID_ZTP) into pocet
+            from P_ZTP
+                where P_ZTP.DAT_OD >= add_months(sysdate, -6) and P_ZTP.ROD_CISLO = :NEW.ROD_CISLO
+                    group by P_ZTP.ROD_CISLO;
+        if pocet > 0 then raise_application_error(-20001, 'Nemozno vyhodit zamestnanca');
+        end if;
+    end;
+/
