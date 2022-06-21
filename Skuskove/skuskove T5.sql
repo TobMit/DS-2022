@@ -186,3 +186,4 @@ update P_POISTENIE
                                                         where N_KRAJINY = 'Slovensko'
                                                             group by ico
                                                                 having count(ROD_CISLO) < 5));
+-- koniec semestra
